@@ -1,0 +1,33 @@
+{
+  "name": "scat",
+  "version": "1.0.0",
+  "description": "scuttlebutt chat",
+  "main": "index.js",
+  "scripts": {
+    "test": "standard"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/stripedpajamas/scat.git"
+  },
+  "keywords": [
+    "scuttlebutt",
+    "chat",
+    "ssb"
+  ],
+  "author": "Peter Squicciarini <stripedpajamas273@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/stripedpajamas/scat/issues"
+  },
+  "homepage": "https://github.com/stripedpajamas/scat#readme",
+  "devDependencies": {
+    "standard": "^11.0.1"
+  },
+  "dependencies": {
+    "clorox": "^1.0.3",
+    "diffy": "^2.0.0",
+    "pull-stream": "^3.6.7",
+    "ssb-party": "^0.5.1"
+  }
+}
