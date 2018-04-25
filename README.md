@@ -10,16 +10,16 @@ $ npm i -g ssb-chat
   ...
 $ scat
 ```
-OR (no global install)
-```bash
-$ npx ssb-chat
-```
 
 ### usage
 ```
 $ scat
 ...
 > type a message and hit enter and it will publish a scat_message to your feed
-> /pub invite-code to join a pub server
+
+# to join a pub server:
+> /pub invite-code
+
+# to self-identify:
 > /name name to self-identify
 ```
