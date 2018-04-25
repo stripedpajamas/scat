@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 const pull = require('pull-stream')
 const party = require('ssb-party')
 const constants = require('./util/constants')
