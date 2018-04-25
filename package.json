@@ -1,8 +1,11 @@
 {
-  "name": "scat",
+  "name": "@twoseventythree/scat",
   "version": "1.0.0",
   "description": "scuttlebutt chat",
   "main": "index.js",
+  "bin": {
+    "scat": "index.js"
+  },
   "scripts": {
     "test": "standard"
   },
