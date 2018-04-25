@@ -6,13 +6,13 @@ more on scuttlebutt: https://www.scuttlebutt.nz/
 
 ### install / run
 ```bash
-$ npm i -g @twoseventythree/scat
+$ npm i -g ssb-chat
   ...
 $ scat
 ```
 OR (no global install)
 ```bash
-$ npx scat
+$ npx ssb-chat
 ```
 
 ### usage
