@@ -9,8 +9,6 @@ const color = require('./color')
 
 const messages = []
 
-// const style = (start, cursor, end) => `> ${start}${cursor || ' '}${end}`
-
 const diffy = Diffy({ fullscreen: true })
 const input = Input({ showCursor: true })
 
@@ -53,6 +51,8 @@ input.on('enter', (line) => {
 // exit gracefully when i hit control-c
 input.on('ctrl-c', () => {
   console.log('Goodbye\n\n')
+  const sbot = client.getClient()
+  sbot.control.stop()
   process.exit(0)
 })
 
