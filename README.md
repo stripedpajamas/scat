@@ -25,17 +25,30 @@ pete : not much
 > /pub invite-code
 
 # to self-identify:
-> /name name to self-identify
+> /name name
+
+# to identify someone else:
+> /identify @id name
+
+# to follow someone
+> /follow @id
+
+# to unfollow someone
+> /unfollow @id
+
+# to look up someone's id
+> /whois name
+
+# to look up your own id
+> /whoami
 ```
 
 ### what's happening
 scat uses a special message type `scat_message`. this means that if you're using something like [Patchwork](https://github.com/ssbc/patchwork), your feed won't be all gobbled up by chat messages. And scat won't be all gobbled up by your posts. 
 
-But since it's all the same protocol and all the same feeds, all the same people are there. scat looks for `about` messages to show a uxer's name instead of their id, but falls back to the id if necessary.
+but since it's all the same protocol and all the same feeds, all the same people are there. scat looks for `about` messages to show a user's name instead of their id, but falls back to the id if necessary.
 
-`/name myname` publishes an `about` message to your feed, just like self-identifying in Patchwork. 
-
-`/pub invite-code` joins a pub server as you would expect, so you can chat through the internet.
+scat will honor self-identification above a 3rd party's identification of another user, and scat will honor your identification of another user above their own self-identification. a 3rd party's identification of another user is not honored at all.
 
 ### license
 MIT

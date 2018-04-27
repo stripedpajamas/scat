@@ -12,7 +12,7 @@ module.exports = (msg) => {
         if (m.content.about && m.content.name) {
           // only honor self-identification or my own identification of someone else
           if (m.author === m.content.about || m.author === me) {
-            client.setAuthor(m.content.about, m.content.name)
+            client.setAuthor(m.content.about, m.content.name, m.author)
           }
         }
         break
