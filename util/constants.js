@@ -1,4 +1,5 @@
 module.exports = {
   MESSAGE_TYPE: 'scat_message',
-  ABOUT: 'about'
+  ABOUT: 'about',
+  CONTACT: 'contact'
 }
