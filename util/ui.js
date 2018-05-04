@@ -60,7 +60,7 @@ input.on('ctrl-c', () => {
 
 const prompter = () => (
   diffy.render(() => trim(`
-    ${messages.map(m => `${m.time}  ${m.text}`).join('\n')}
+    ${messages.map(m => `${m.time}  ${m.text()}`).join('\n')}
     > ${input.line()}
   `))
 )
@@ -74,7 +74,7 @@ const printMsg = (msg) => {
   messages.push({
     author: client.getAuthor(msg.author),
     rawAuthor: msg.author,
-    text: `${`${c.bold[color(msg.author)](client.getAuthor(msg.author))} : ${msg.content.text}`}`,
+    text: () => `${`${c.bold[color(msg.author)](client.getAuthor(msg.author))} : ${msg.content.text}`}`,
     rawText: msg.content.text,
     time: `${`${c.gray.dim(format(msg.timestamp, fmt))}`}`,
     rawTime: msg.timestamp
@@ -85,7 +85,7 @@ const printSelfMsg = (msg) => {
   messages.push({
     author: client.getAuthor(msg.author),
     rawAuthor: msg.author,
-    text: `${`${c.bold.green(client.getAuthor(msg.author))} : ${msg.content.text}`}`,
+    text: () => `${`${c.bold.green(client.getAuthor(msg.author))} : ${msg.content.text}`}`,
     rawText: msg.content.text,
     time: `${`${c.gray.dim(format(msg.timestamp, fmt))}`}`,
     rawTime: msg.timestamp
