@@ -13,7 +13,7 @@ module.exports = (name, who) => {
     }
 
     if (sbot && target && name) {
-      sbot.publish({ type: constants.ABOUT, about: who, name }, (err) => {
+      sbot.publish({ type: constants.ABOUT, about: target, name }, (err) => {
         if (err) return reject(err)
         resolve()
       })
