@@ -11,7 +11,7 @@ const color = require('./color')
 const fmt = 'MMM DD HH:mm A'
 const messages = []
 
-const diffy = Diffy({ fullscreen: false })
+const diffy = Diffy({ fullscreen: true })
 const input = Input({ showCursor: true })
 
 // populate input with last message sent by me when i hit up

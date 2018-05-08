@@ -30,6 +30,9 @@ pete : not much
 # to identify someone else:
 > /identify @id name
 
+# to send a private message:
+> /private @id,...,@id msg
+
 # to follow someone
 > /follow @id
 
@@ -49,6 +52,8 @@ scat uses a special message type `scat_message`. this means that if you're using
 but since it's all the same protocol and all the same feeds, all the same people are there. scat looks for `about` messages to show a user's name instead of their id, but falls back to the id if necessary.
 
 scat will honor self-identification above a 3rd party's identification of another user, and scat will honor your identification of another user above their own self-identification. a 3rd party's identification of another user is not honored at all.
+
+scat supports sending private scat messages. it will auto-add your id to the recipients list so that you are able to see your own private messages. 
 
 ### license
 MIT
