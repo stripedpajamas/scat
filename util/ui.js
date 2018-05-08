@@ -7,6 +7,7 @@ const client = require('./client')
 const modules = require('../modules')
 const commands = require('./commands')
 const color = require('./color')
+const sort = require('./sort')
 
 const fmt = 'MMM DD HH:mm A'
 const messages = []
@@ -89,11 +90,14 @@ const printMsg = (msg) => {
     rawAuthor: msg.author,
     private: msg.private,
     text: () =>
-      `${`${c.bold[color(msg.author)](client.getAuthor(msg.author))} : ${msg.private ? `${c.underline(msg.content.text)}` : msg.content.text}`}`,
+      `${`${c.bold[color(msg.author)](client.getAuthor(msg.author))} : ${msg.private ? `${c.bgGreen(msg.content.text)}` : msg.content.text}`}`,
     rawText: msg.content.text,
     time: `${`${c.gray.dim(format(msg.timestamp, fmt))}`}`,
     rawTime: msg.timestamp
   })
+  if (msg.private) {
+    sort(messages)
+  }
 }
 
 const printSelfMsg = (msg) => {
@@ -101,11 +105,14 @@ const printSelfMsg = (msg) => {
     author: () => client.getAuthor(msg.author),
     rawAuthor: msg.author,
     private: msg.private,
-    text: () => `${`${c.bold.green(client.getAuthor(msg.author))} : ${msg.private ? `${c.underline(msg.content.text)}` : msg.content.text}`}`,
+    text: () => `${`${c.bold.green(client.getAuthor(msg.author))} : ${msg.private ? `${c.bgGreen(msg.content.text)}` : msg.content.text}`}`,
     rawText: msg.content.text,
     time: `${`${c.gray.dim(format(msg.timestamp, fmt))}`}`,
     rawTime: msg.timestamp
   })
+  if (msg.private) {
+    sort(messages)
+  }
 }
 
 const printSysMsg = (msg) => {

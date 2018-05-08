@@ -14,6 +14,8 @@ process.on('uncaughtException', () => {
 })
 
 const opts = { party: { out: false, err: false }, timers: { keepalive: 10 } }
+const hr = 60 * 60 * 1000
+const since = Date.now() - (7 * 24 * hr) // 1 week of data
 
 party(opts, (err, sbot) => {
   if (err) {
@@ -27,13 +29,14 @@ party(opts, (err, sbot) => {
 
   // start streaming abouts
   pull(
+    // don't limit the about messages to a week because we want identifiers
     sbot.messagesByType({ type: constants.ABOUT, live: true }),
     pull.drain(processor)
   )
 
   // start streaming messages
   pull(
-    sbot.messagesByType({ type: constants.MESSAGE_TYPE, live: true }),
+    sbot.messagesByType({ type: constants.MESSAGE_TYPE, live: true, gt: since }),
     pull.drain(processor)
   )
 
