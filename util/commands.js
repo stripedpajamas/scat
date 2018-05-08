@@ -104,22 +104,6 @@ module.exports = (line) => new Promise((resolve, reject) => {
     }
     return resolve({ command: true, print: client.getAuthorId(split[1]) })
   }
-  
-  // // /private @id,@id msg
-  // if (line.indexOf('/private') === 0) {
-  //   const split = line.split(' ')
-  //   if (split.length < 3) {
-  //     return resolve({ command: true, print: 'To send a private message: /private @id1,...,@id7 msg' })
-  //   }
-  //   const recipients = split[1].split(',')
-  //   if (recipients.length > 6) {
-  //     return resolve({ command: true, print: 'You can only send a private message to up to 7 recipients' })
-  //   }
-  //   const msg = split.slice(2).join(' ')
-  //   return modules.private(msg, recipients)
-  //   .then(() => resolve({ command: true }))
-  //   .catch((e) => console.log(e) && reject(new Error('Could not send private message')))
-  // }
 
   // if we're in private mode, resolve it so our UI knows
   if (currentMode === mode.PRIVATE) {
