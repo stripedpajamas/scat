@@ -10,8 +10,9 @@ const color = require('./color')
 
 const fmt = 'MMM DD HH:mm A'
 const messages = []
+let privateMessages = []
 
-const diffy = Diffy({ fullscreen: true })
+const diffy = Diffy({ fullscreen: false })
 const input = Input({ showCursor: true })
 
 // populate input with last message sent by me when i hit up
@@ -43,6 +44,12 @@ input.on('enter', (line) => {
       } else if (!response.command) {
         // default to post a message
         modules.post(line).catch(() => printErrMsg('Failed to post message'))
+      } else if (response.recipients || response.privateChat) {
+        // private chat started, so filter messages 
+        privateMessages = messages.filter(x => response.recipients.includes(x.author()) && x.private)
+      } else {
+        // no longer in private chat, empty our private chat array
+        privateMessages = []
       }
     })
     .catch((error) => {
@@ -60,9 +67,13 @@ input.on('ctrl-c', () => {
   process.exit(0)
 })
 
+const visibleMessages = () => (
+  privateMessages.length ? privateMessages : messages
+)
+
 const prompter = () => (
   diffy.render(() => trim(`
-    ${messages.map(m => `${m.time}  ${m.text()}`).join('\n')}
+    ${visibleMessages().map(m => `${m.time}  ${m.text()}`).join('\n')}
     > ${input.line()}
   `))
 )
@@ -76,6 +87,7 @@ const printMsg = (msg) => {
   messages.push({
     author: () => client.getAuthor(msg.author),
     rawAuthor: msg.author,
+    private: msg.private,
     text: () =>
       `${`${c.bold[color(msg.author)](client.getAuthor(msg.author))} : ${msg.private ? `${c.underline(msg.content.text)}` : msg.content.text}`}`,
     rawText: msg.content.text,
@@ -88,6 +100,7 @@ const printSelfMsg = (msg) => {
   messages.push({
     author: () => client.getAuthor(msg.author),
     rawAuthor: msg.author,
+    private: msg.private,
     text: () => `${`${c.bold.green(client.getAuthor(msg.author))} : ${msg.private ? `${c.underline(msg.content.text)}` : msg.content.text}`}`,
     rawText: msg.content.text,
     time: `${`${c.gray.dim(format(msg.timestamp, fmt))}`}`,
