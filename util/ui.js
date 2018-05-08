@@ -5,14 +5,16 @@ const c = require('clorox')
 const format = require('date-fns/format')
 const client = require('./client')
 const modules = require('../modules')
-const commands = require('./commands')
+const commander = require('./commander')
 const color = require('./color')
 const sort = require('./sort')
+const tabComplete = require('./tabComplete')
 
 const fmt = 'MMM DD HH:mm A'
 const messages = []
+let tabCompleter = null
 
-const diffy = Diffy({ fullscreen: true })
+const diffy = Diffy({ fullscreen: false })
 const input = Input({ showCursor: true })
 
 // populate input with last message sent by me when i hit up
@@ -26,6 +28,10 @@ input.on('up', () => {
 // clear the input if i hit down or esc
 input.on('down', () => input.set(''))
 input.on('keypress', (_, key) => {
+  // on any key press that isn't a tab, cancel tab completion
+  if (key && key.name !== 'tab') {
+    tabCompleter = null
+  }
   if (key && key.name === 'escape') {
     input.set('')
   }
@@ -37,7 +43,7 @@ input.on('update', () => diffy.render())
 // post a message or fire a command when i hit enter
 input.on('enter', (line) => {
   // handle /slash commands
-  commands(line)
+  commander.cmd(line)
     .then((response) => {
       if (response.print) {
         printSysMsg(response.print)
@@ -51,9 +57,17 @@ input.on('enter', (line) => {
     })
 })
 
+// try to complete an id when i hit tab
+input.on('tab', () => {
+  if (!tabCompleter) {
+    tabCompleter = tabComplete(input.rawLine())
+  }
+  input.set(tabCompleter())
+})
+
 // exit gracefully when i hit control-c
 input.on('ctrl-c', () => {
-  console.log('Goodbye\n\n')
+  console.log('\n\nGoodbye\n')
   const sbot = client.getClient()
   if (sbot && sbot.control && typeof sbot.control.stop === 'function') {
     sbot.control.stop()

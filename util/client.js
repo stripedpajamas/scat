@@ -27,5 +27,6 @@ module.exports = {
     }
     // if any of that wasn't true, go ahead and set it
     authors[author] = { name, setter }
-  }
+  },
+  getAuthors: () => authors
 }
