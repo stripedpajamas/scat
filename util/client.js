@@ -1,5 +1,3 @@
-const ref = require('ssb-ref')
-
 let me
 let client
 const authors = {}
