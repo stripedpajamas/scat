@@ -1,3 +1,5 @@
+const ref = require('ssb-ref')
+
 let me
 let client
 const authors = {}
@@ -8,7 +10,13 @@ module.exports = {
   getMe: () => me,
   setMe: (m) => { me = m },
   getAuthor: (author) => (authors[author] || {}).name || author,
-  getAuthorId: (name) => Object.keys(authors).find(author => authors[author].name === name) || name,
+  getAuthorId: (name) => {
+    let n = name
+    if (n.indexOf('@') === 0) {
+      n = name.slice(1)
+    }
+    return Object.keys(authors).find(author => authors[author].name === n) || name
+  },
   setAuthor: (author, name, setter) => {
     const alreadySet = authors[author]
     // if we already have this author set

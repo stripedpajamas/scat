@@ -1,12 +1,24 @@
 const constants = require('./constants')
 const client = require('./client')
+const modules = require('../modules')
 const ui = require('./ui')
 
-module.exports = (msg) => {
+const processor = (msg) => {
   const m = msg.value
   const me = client.getMe()
 
   if (m && m.content) {
+    // first see if we are dealing with an encrypted message
+    if (typeof m.content === 'string') {
+      modules.unbox(m.content)
+        .then((content) => {
+          const decryptedMsg = msg
+          decryptedMsg.value.content = content
+          decryptedMsg.value.private = true // so we can alter the ui
+          return processor(decryptedMsg)
+        })
+        .catch(() => {}) // ignore failure to decrypt private messages
+    }
     switch (m.content.type) {
       case constants.ABOUT:
         if (m.content.about && m.content.name) {
@@ -28,3 +40,5 @@ module.exports = (msg) => {
     }
   }
 }
+
+module.exports = processor

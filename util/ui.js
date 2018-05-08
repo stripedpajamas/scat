@@ -11,7 +11,7 @@ const color = require('./color')
 const fmt = 'MMM DD HH:mm A'
 const messages = []
 
-const diffy = Diffy({ fullscreen: true })
+const diffy = Diffy({ fullscreen: false })
 const input = Input({ showCursor: true })
 
 // populate input with last message sent by me when i hit up
@@ -38,9 +38,9 @@ input.on('enter', (line) => {
   // handle /slash commands
   commands(line)
     .then((response) => {
-      if (response) {
-        printSysMsg(response)
-      } else {
+      if (response.print) {
+        printSysMsg(response.print)
+      } else if (!response.command) {
         // default to post a message
         modules.post(line).catch(() => printErrMsg('Failed to post message'))
       }
@@ -54,7 +54,9 @@ input.on('enter', (line) => {
 input.on('ctrl-c', () => {
   console.log('Goodbye\n\n')
   const sbot = client.getClient()
-  sbot.control.stop()
+  if (sbot && sbot.control && typeof sbot.control.stop === 'function') {
+    sbot.control.stop()
+  }
   process.exit(0)
 })
 
@@ -72,9 +74,10 @@ const setup = () => {
 
 const printMsg = (msg) => {
   messages.push({
-    author: client.getAuthor(msg.author),
+    author: () => client.getAuthor(msg.author),
     rawAuthor: msg.author,
-    text: () => `${`${c.bold[color(msg.author)](client.getAuthor(msg.author))} : ${msg.content.text}`}`,
+    text: () =>
+      `${`${c.bold[color(msg.author)](client.getAuthor(msg.author))} : ${msg.private ? `${c.underline(msg.content.text)}` : msg.content.text}`}`,
     rawText: msg.content.text,
     time: `${`${c.gray.dim(format(msg.timestamp, fmt))}`}`,
     rawTime: msg.timestamp
@@ -83,9 +86,9 @@ const printMsg = (msg) => {
 
 const printSelfMsg = (msg) => {
   messages.push({
-    author: client.getAuthor(msg.author),
+    author: () => client.getAuthor(msg.author),
     rawAuthor: msg.author,
-    text: () => `${`${c.bold.green(client.getAuthor(msg.author))} : ${msg.content.text}`}`,
+    text: () => `${`${c.bold.green(client.getAuthor(msg.author))} : ${msg.private ? `${c.underline(msg.content.text)}` : msg.content.text}`}`,
     rawText: msg.content.text,
     time: `${`${c.gray.dim(format(msg.timestamp, fmt))}`}`,
     rawTime: msg.timestamp
@@ -94,7 +97,7 @@ const printSelfMsg = (msg) => {
 
 const printSysMsg = (msg) => {
   messages.push({
-    text: `${`${c.bold.yellow(msg)}`}`,
+    text: () => `${`${c.bold.yellow(msg)}`}`,
     rawText: msg,
     time: `${`${c.gray.dim(format(Date.now(), fmt))}`}`,
     rawTime: Date.now()
@@ -103,7 +106,7 @@ const printSysMsg = (msg) => {
 
 const printErrMsg = (msg) => {
   messages.push({
-    text: `${`${c.bold.bgRed.white(msg)}`}`,
+    text: () => `${`${c.bold.bgRed.white(msg)}`}`,
     rawText: msg,
     time: `${`${c.gray.dim(format(Date.now(), fmt))}`}`,
     rawTime: Date.now()

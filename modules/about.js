@@ -1,3 +1,4 @@
+const ref = require('ssb-ref')
 const client = require('../util/client')
 const constants = require('../util/constants')
 
@@ -8,7 +9,7 @@ module.exports = (name, who) => {
     let target = who || me
 
     // if this is a name and not an id, look up the id in our author map
-    if (target.indexOf('@') !== 0) {
+    if (!ref.isFeedId(target)) {
       target = client.getAuthor(target)
     }
 
