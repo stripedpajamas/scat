@@ -7,6 +7,7 @@ const client = require('./client')
 const modules = require('../modules')
 const commands = require('./commands')
 const color = require('./color')
+const sort = require('./sort')
 
 const fmt = 'MMM DD HH:mm A'
 const messages = []
@@ -82,6 +83,9 @@ const printMsg = (msg) => {
     time: `${`${c.gray.dim(format(msg.timestamp, fmt))}`}`,
     rawTime: msg.timestamp
   })
+  if (msg.private) {
+    sort(messages)
+  }
 }
 
 const printSelfMsg = (msg) => {
@@ -93,6 +97,9 @@ const printSelfMsg = (msg) => {
     time: `${`${c.gray.dim(format(msg.timestamp, fmt))}`}`,
     rawTime: msg.timestamp
   })
+  if (msg.private) {
+    sort(messages)
+  }
 }
 
 const printSysMsg = (msg) => {
