@@ -1,9 +1,8 @@
 const client = require('./client')
 const modules = require('../modules')
+const mode = require('./constants').MODE
 
-const mode = Object.freeze({ PUBLIC: 0, PRIVATE: 1 })
 let currentMode = mode.PUBLIC
-
 let recipients;
 
 module.exports = (line) => new Promise((resolve, reject) => {
@@ -37,9 +36,8 @@ module.exports = (line) => new Promise((resolve, reject) => {
     currentMode = mode.PRIVATE
     recipients = newRecipients.map(x => x.slice(1))
 
-    return resolve({ command: true, recipients })
+    return resolve({ command: true, privateChat: true })
   }
-  
   
   // /name name
   if (line.indexOf('/name') === 0) {

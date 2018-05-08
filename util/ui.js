@@ -8,6 +8,7 @@ const modules = require('../modules')
 const commands = require('./commands')
 const color = require('./color')
 const sort = require('./sort')
+const mode = require('./constants').MODE
 
 const fmt = 'MMM DD HH:mm A'
 const messages = []
@@ -15,6 +16,8 @@ let privateMessages = []
 
 const diffy = Diffy({ fullscreen: false })
 const input = Input({ showCursor: true })
+
+let currentMode = mode.PUBLIC
 
 // populate input with last message sent by me when i hit up
 input.on('up', () => {
@@ -45,11 +48,12 @@ input.on('enter', (line) => {
       } else if (!response.command) {
         // default to post a message
         modules.post(line).catch(() => printErrMsg('Failed to post message'))
-      } else if (response.recipients || response.privateChat) {
+      } else if (response.privateChat) {
         // private chat started, so filter messages 
-        privateMessages = messages.filter(x => response.recipients.includes(x.author()) && x.private)
+        currentMode = mode.PRIVATE
       } else {
         // no longer in private chat, empty our private chat array
+        currentMode = mode.PUBLIC
         privateMessages = []
       }
     })
@@ -69,7 +73,7 @@ input.on('ctrl-c', () => {
 })
 
 const visibleMessages = () => (
-  privateMessages.length ? privateMessages : messages
+  currentMode === mode.PRIVATE ? privateMessages : messages
 )
 
 const prompter = () => (
@@ -85,7 +89,7 @@ const setup = () => {
 }
 
 const printMsg = (msg) => {
-  messages.push({
+  const message = {
     author: () => client.getAuthor(msg.author),
     rawAuthor: msg.author,
     private: msg.private,
@@ -94,14 +98,17 @@ const printMsg = (msg) => {
     rawText: msg.content.text,
     time: `${`${c.gray.dim(format(msg.timestamp, fmt))}`}`,
     rawTime: msg.timestamp
-  })
-  if (msg.private) {
-    sort(messages)
   }
+  messages.push(message)
+  if (currentMode === mode.PRIVATE && msg.private) privateMessages.push(message)
+  else messages.push(message)
+  // if (msg.private) {
+  //   sort(messages)
+  // }
 }
 
 const printSelfMsg = (msg) => {
-  messages.push({
+  const message = {
     author: () => client.getAuthor(msg.author),
     rawAuthor: msg.author,
     private: msg.private,
@@ -109,10 +116,13 @@ const printSelfMsg = (msg) => {
     rawText: msg.content.text,
     time: `${`${c.gray.dim(format(msg.timestamp, fmt))}`}`,
     rawTime: msg.timestamp
-  })
-  if (msg.private) {
-    sort(messages)
   }
+  messages.push(message)
+  if (currentMode === mode.PRIVATE) privateMessages.push(message)
+  else messages.push(message)
+  // if (msg.private) {
+  //   sort(messages)
+  // }
 }
 
 const printSysMsg = (msg) => {
