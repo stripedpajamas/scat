@@ -7,7 +7,7 @@ const client = require('./util/client')
 const processor = require('./util/processor')
 
 process.on('uncaughtException', () => {
-  console.log('Uncaught exception, exiting :(')
+  console.log('\n\nUncaught exception, exiting :(')
   const sbot = client.getClient()
   sbot && sbot.control && typeof sbot.control.stop === 'function' && sbot.control.stop()
   process.exit(1)

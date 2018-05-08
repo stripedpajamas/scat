@@ -5,19 +5,19 @@ const c = require('clorox')
 const format = require('date-fns/format')
 const client = require('./client')
 const modules = require('../modules')
-const commands = require('./commands')
+const commander = require('./commander')
 const color = require('./color')
 const sort = require('./sort')
-const mode = require('./constants').MODE
+const messenger = require('./messenger')
+const tabComplete = require('./tabComplete')
 
 const fmt = 'MMM DD HH:mm A'
 const messages = []
 let privateMessages = []
+let tabCompleter = null
 
 const diffy = Diffy({ fullscreen: false })
 const input = Input({ showCursor: true })
-
-let currentMode = mode.PUBLIC
 
 // populate input with last message sent by me when i hit up
 input.on('up', () => {
@@ -30,6 +30,10 @@ input.on('up', () => {
 // clear the input if i hit down or esc
 input.on('down', () => input.set(''))
 input.on('keypress', (_, key) => {
+  // on any key press that isn't a tab, cancel tab completion
+  if (key && key.name !== 'tab') {
+    tabCompleter = null
+  }
   if (key && key.name === 'escape') {
     input.set('')
   }
@@ -41,20 +45,13 @@ input.on('update', () => diffy.render())
 // post a message or fire a command when i hit enter
 input.on('enter', (line) => {
   // handle /slash commands
-  commands(line)
+  commander.cmd(line)
     .then((response) => {
       if (response.print) {
         printSysMsg(response.print)
       } else if (!response.command) {
         // default to post a message
-        modules.post(line).catch(() => printErrMsg('Failed to post message'))
-      } else if (response.privateChat) {
-        // private chat started, so filter messages 
-        currentMode = mode.PRIVATE
-      } else {
-        // no longer in private chat, empty our private chat array
-        currentMode = mode.PUBLIC
-        privateMessages = []
+        messenger.sendMessage(line).catch(printErrMsg)
       }
     })
     .catch((error) => {
@@ -62,9 +59,17 @@ input.on('enter', (line) => {
     })
 })
 
+// try to complete an id when i hit tab
+input.on('tab', () => {
+  if (!tabCompleter) {
+    tabCompleter = tabComplete(input.rawLine())
+  }
+  input.set(tabCompleter())
+})
+
 // exit gracefully when i hit control-c
 input.on('ctrl-c', () => {
-  console.log('Goodbye\n\n')
+  console.log('\n\nGoodbye\n')
   const sbot = client.getClient()
   if (sbot && sbot.control && typeof sbot.control.stop === 'function') {
     sbot.control.stop()
@@ -73,7 +78,7 @@ input.on('ctrl-c', () => {
 })
 
 const visibleMessages = () => (
-  currentMode === mode.PRIVATE ? privateMessages : messages
+  client.isPrivateMode() ? client.getPrivateMessages() : client.getPublicMessages()
 )
 
 const prompter = () => (
@@ -92,35 +97,31 @@ const printMsg = (msg) => {
   const message = {
     author: () => client.getAuthor(msg.author),
     rawAuthor: msg.author,
-    private: msg.private,
     text: () =>
       `${`${c.bold[color(msg.author)](client.getAuthor(msg.author))} : ${msg.private ? `${c.bgGreen(msg.content.text)}` : msg.content.text}`}`,
     rawText: msg.content.text,
     time: `${`${c.gray.dim(format(msg.timestamp, fmt))}`}`,
     rawTime: msg.timestamp
   }
-  messages.push(message)
-  if (currentMode === mode.PRIVATE && msg.private) privateMessages.push(message)
-  else messages.push(message)
+  if (client.isPrivateMode() && msg.private) client.pushPrivateMessage(message)
+  else client.pushPublicMessage(message)
 }
 
 const printSelfMsg = (msg) => {
   const message = {
     author: () => client.getAuthor(msg.author),
     rawAuthor: msg.author,
-    private: msg.private,
     text: () => `${`${c.bold.green(client.getAuthor(msg.author))} : ${msg.private ? `${c.bgGreen(msg.content.text)}` : msg.content.text}`}`,
     rawText: msg.content.text,
     time: `${`${c.gray.dim(format(msg.timestamp, fmt))}`}`,
     rawTime: msg.timestamp
   }
-  messages.push(message)
-  if (currentMode === mode.PRIVATE) privateMessages.push(message)
-  else messages.push(message)
+  if (client.isPrivateMode()) client.pushPrivateMessage(message)
+  else client.pushPublicMessage(message)
 }
 
 const printSysMsg = (msg) => {
-  messages.push({
+  client.pushMessage({
     text: () => `${`${c.bold.yellow(msg)}`}`,
     rawText: msg,
     time: `${`${c.gray.dim(format(Date.now(), fmt))}`}`,
@@ -129,7 +130,7 @@ const printSysMsg = (msg) => {
 }
 
 const printErrMsg = (msg) => {
-  messages.push({
+  client.pushMessage({
     text: () => `${`${c.bold.bgRed.white(msg)}`}`,
     rawText: msg,
     time: `${`${c.gray.dim(format(Date.now(), fmt))}`}`,
