@@ -102,9 +102,6 @@ const printMsg = (msg) => {
   messages.push(message)
   if (currentMode === mode.PRIVATE && msg.private) privateMessages.push(message)
   else messages.push(message)
-  // if (msg.private) {
-  //   sort(messages)
-  // }
 }
 
 const printSelfMsg = (msg) => {
@@ -120,9 +117,6 @@ const printSelfMsg = (msg) => {
   messages.push(message)
   if (currentMode === mode.PRIVATE) privateMessages.push(message)
   else messages.push(message)
-  // if (msg.private) {
-  //   sort(messages)
-  // }
 }
 
 const printSysMsg = (msg) => {
