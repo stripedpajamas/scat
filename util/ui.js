@@ -77,7 +77,7 @@ const printMsg = (msg) => {
     author: () => client.getAuthor(msg.author),
     rawAuthor: msg.author,
     text: () =>
-      `${`${c.bold[color(msg.author)](client.getAuthor(msg.author))} : ${msg.private ? `${c.underline(msg.content.text)}` : msg.content.text}`}`,
+      `${`${c.bold[color(msg.author)](client.getAuthor(msg.author))} : ${msg.private ? `${c.bgGreen(msg.content.text)}` : msg.content.text}`}`,
     rawText: msg.content.text,
     time: `${`${c.gray.dim(format(msg.timestamp, fmt))}`}`,
     rawTime: msg.timestamp
@@ -88,7 +88,7 @@ const printSelfMsg = (msg) => {
   messages.push({
     author: () => client.getAuthor(msg.author),
     rawAuthor: msg.author,
-    text: () => `${`${c.bold.green(client.getAuthor(msg.author))} : ${msg.private ? `${c.underline(msg.content.text)}` : msg.content.text}`}`,
+    text: () => `${`${c.bold.green(client.getAuthor(msg.author))} : ${msg.private ? `${c.bgGreen(msg.content.text)}` : msg.content.text}`}`,
     rawText: msg.content.text,
     time: `${`${c.gray.dim(format(msg.timestamp, fmt))}`}`,
     rawTime: msg.timestamp
