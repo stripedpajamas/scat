@@ -5,7 +5,7 @@ const author = (partial) => {
   const authors = client.getAuthors()
   const names = Object.values(authors).map(obj => obj.name)
 
-  return names.filter(name => name.startsWith(partial)).map(name => `@${name}`)
+  return names.filter(name => name.startsWith(partial))
 }
 
 const command = (partial) => {
@@ -22,9 +22,9 @@ module.exports = (line) => {
   if (split.length === 1 && lastWord.indexOf('/') === 0) { // command
     matches = command(lastWord)
   } else {
-    // if they included an @ symbol, take it off for searching
-    if (lastWord.indexOf('@') === 0) {
-      lastWord = lastWord.slice(1)
+    // if they didn't include an @ symbol, put one on
+    if (lastWord.indexOf('@') !== 0) {
+      lastWord = `@${lastWord}`
     }
 
     matches = author(lastWord)

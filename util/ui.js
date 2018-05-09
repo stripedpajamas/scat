@@ -4,16 +4,12 @@ const Input = require('diffy/input')
 const c = require('clorox')
 const format = require('date-fns/format')
 const client = require('./client')
-const modules = require('../modules')
 const commander = require('./commander')
 const color = require('./color')
-const sort = require('./sort')
 const messenger = require('./messenger')
 const tabComplete = require('./tabComplete')
 
 const fmt = 'MMM DD HH:mm A'
-const messages = []
-let privateMessages = []
 let tabCompleter = null
 
 const diffy = Diffy({ fullscreen: false })
@@ -21,7 +17,7 @@ const input = Input({ showCursor: true })
 
 // populate input with last message sent by me when i hit up
 input.on('up', () => {
-  const myMsgs = messages.filter(m => m.rawAuthor === client.getMe())
+  const myMsgs = client.getMessages().filter(m => m.rawAuthor === client.getMe())
   if (myMsgs[myMsgs.length - 1]) {
     input.set(myMsgs[myMsgs.length - 1].rawText)
   }
@@ -54,9 +50,7 @@ input.on('enter', (line) => {
         messenger.sendMessage(line).catch(printErrMsg)
       }
     })
-    .catch((error) => {
-      printErrMsg(error.message)
-    })
+    .catch(printErrMsg)
 })
 
 // try to complete an id when i hit tab
@@ -77,21 +71,12 @@ input.on('ctrl-c', () => {
   process.exit(0)
 })
 
-const visibleMessages = () => (
-  client.isPrivateMode() ? client.getPrivateMessages() : client.getPublicMessages()
-)
-
 const prompter = () => (
   diffy.render(() => trim(`
-    ${visibleMessages().map(m => `${m.time}  ${m.text()}`).join('\n')}
+    ${client.getMessages().map(m => `${m.time}  ${m.text()}`).join('\n')}
     > ${input.line()}
   `))
 )
-
-const setup = () => {
-  prompter()
-  setInterval(() => diffy.render(), 1000)
-}
 
 const printMsg = (msg) => {
   const message = {
@@ -103,21 +88,22 @@ const printMsg = (msg) => {
     time: `${`${c.gray.dim(format(msg.timestamp, fmt))}`}`,
     rawTime: msg.timestamp
   }
-  if (client.isPrivateMode() && msg.private) client.pushPrivateMessage(message)
-  else client.pushPublicMessage(message)
+  if (client.isPrivateMode() && msg.private) {
+    client.pushPrivateMessage(message)
+  } else {
+    client.pushPublicMessage(message)
+  }
 }
 
 const printSelfMsg = (msg) => {
-  const message = {
+  client.pushMessage({
     author: () => client.getAuthor(msg.author),
     rawAuthor: msg.author,
     text: () => `${`${c.bold.green(client.getAuthor(msg.author))} : ${msg.private ? `${c.bgGreen(msg.content.text)}` : msg.content.text}`}`,
     rawText: msg.content.text,
     time: `${`${c.gray.dim(format(msg.timestamp, fmt))}`}`,
     rawTime: msg.timestamp
-  }
-  if (client.isPrivateMode()) client.pushPrivateMessage(message)
-  else client.pushPublicMessage(message)
+  })
 }
 
 const printSysMsg = (msg) => {
@@ -129,13 +115,19 @@ const printSysMsg = (msg) => {
   })
 }
 
-const printErrMsg = (msg) => {
+const printErrMsg = (error) => {
+  const msg = error.message
   client.pushMessage({
     text: () => `${`${c.bold.bgRed.white(msg)}`}`,
     rawText: msg,
     time: `${`${c.gray.dim(format(Date.now(), fmt))}`}`,
     rawTime: Date.now()
   })
+}
+
+const setup = () => {
+  prompter()
+  setInterval(() => diffy.render(), 1000)
 }
 
 module.exports = {

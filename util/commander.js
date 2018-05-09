@@ -1,10 +1,5 @@
 const client = require('./client')
 const modules = require('../modules')
-const mode = require('./constants').MODE
-const messenger = require('./messenger')
-
-let currentMode = mode.PUBLIC
-let recipients
 
 const commands = {
   // /pub invite-code
@@ -18,8 +13,8 @@ const commands = {
       .then(() => resolve('Pub joined successfully'))
       .catch(() => reject(new Error('Could not join pub')))
   }),
-  // :q 
-  '/q': (line) => new Promise((resolve) => {
+  // /quit leaves private mode if in it
+  '/quit': (line) => new Promise((resolve) => {
     client.setPublicMode()
     return resolve()
   }),
@@ -75,20 +70,6 @@ const commands = {
       return resolve('To get someone\'s id: /whois name')
     }
     return resolve(client.getAuthorId(line[1]))
-  }),
-  // /private @id,@id msg
-  '/private': (line) => new Promise((resolve, reject) => {
-    if (line.length < 3) {
-      return resolve('To send a private message: /private @id1,...,@id7 msg')
-    }
-    const recipients = line[1].split(',')
-    if (recipients.length > 6) {
-      return resolve('You can only send a private message to up to 7 recipients')
-    }
-    const msg = line.slice(2).join(' ')
-    return modules.private(msg, recipients)
-      .then(() => resolve())
-      .catch((e) => reject(new Error('Could not send private message')))
   })
 }
 

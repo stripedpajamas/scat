@@ -1,16 +1,16 @@
 const modules = require('../modules')
 const client = require('./client')
-const constants = require('./constants')
 
 let recipients
 
-const setPrivateRecipients = (line) => {
+const setPrivateRecipients = (line) => new Promise((resolve, reject) => {
   recipients = line.split(' ')
   if (recipients.length > 6) {
-    return resolve('You can only send a private message to up to 7 recipients')
+    return reject(new Error('You can only send a private message to up to 7 recipients'))
   }
   client.setPrivateMode()
-}
+  resolve()
+})
 
 const sendPrivateMessage = (msg) => new Promise((resolve, reject) => {
   return modules.private(msg, recipients).catch(() => reject(new Error('Could not send private message')))
