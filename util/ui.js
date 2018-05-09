@@ -8,10 +8,12 @@ const modules = require('../modules')
 const commander = require('./commander')
 const color = require('./color')
 const sort = require('./sort')
+const messenger = require('./messenger')
 const tabComplete = require('./tabComplete')
 
 const fmt = 'MMM DD HH:mm A'
 const messages = []
+let privateMessages = []
 let tabCompleter = null
 
 const diffy = Diffy({ fullscreen: false })
@@ -49,7 +51,7 @@ input.on('enter', (line) => {
         printSysMsg(response.print)
       } else if (!response.command) {
         // default to post a message
-        modules.post(line).catch(() => printErrMsg('Failed to post message'))
+        messenger.sendMessage(line).catch(printErrMsg)
       }
     })
     .catch((error) => {
@@ -75,9 +77,13 @@ input.on('ctrl-c', () => {
   process.exit(0)
 })
 
+const visibleMessages = () => (
+  client.isPrivateMode() ? client.getPrivateMessages() : client.getPublicMessages()
+)
+
 const prompter = () => (
   diffy.render(() => trim(`
-    ${messages.map(m => `${m.time}  ${m.text()}`).join('\n')}
+    ${visibleMessages().map(m => `${m.time}  ${m.text()}`).join('\n')}
     > ${input.line()}
   `))
 )
@@ -88,7 +94,7 @@ const setup = () => {
 }
 
 const printMsg = (msg) => {
-  messages.push({
+  const message = {
     author: () => client.getAuthor(msg.author),
     rawAuthor: msg.author,
     text: () =>
@@ -96,28 +102,26 @@ const printMsg = (msg) => {
     rawText: msg.content.text,
     time: `${`${c.gray.dim(format(msg.timestamp, fmt))}`}`,
     rawTime: msg.timestamp
-  })
-  if (msg.private) {
-    sort(messages)
   }
+  if (client.isPrivateMode() && msg.private) client.pushPrivateMessage(message)
+  else client.pushPublicMessage(message)
 }
 
 const printSelfMsg = (msg) => {
-  messages.push({
+  const message = {
     author: () => client.getAuthor(msg.author),
     rawAuthor: msg.author,
     text: () => `${`${c.bold.green(client.getAuthor(msg.author))} : ${msg.private ? `${c.bgGreen(msg.content.text)}` : msg.content.text}`}`,
     rawText: msg.content.text,
     time: `${`${c.gray.dim(format(msg.timestamp, fmt))}`}`,
     rawTime: msg.timestamp
-  })
-  if (msg.private) {
-    sort(messages)
   }
+  if (client.isPrivateMode()) client.pushPrivateMessage(message)
+  else client.pushPublicMessage(message)
 }
 
 const printSysMsg = (msg) => {
-  messages.push({
+  client.pushMessage({
     text: () => `${`${c.bold.yellow(msg)}`}`,
     rawText: msg,
     time: `${`${c.gray.dim(format(Date.now(), fmt))}`}`,
@@ -126,7 +130,7 @@ const printSysMsg = (msg) => {
 }
 
 const printErrMsg = (msg) => {
-  messages.push({
+  client.pushMessage({
     text: () => `${`${c.bold.bgRed.white(msg)}`}`,
     rawText: msg,
     time: `${`${c.gray.dim(format(Date.now(), fmt))}`}`,

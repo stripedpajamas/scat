@@ -1,6 +1,11 @@
+let constants = require('./constants')
+
 let me
 let client
 const authors = {}
+let messages = []
+let privateMessages = []
+let currentMode = constants.MODE.PUBLIC
 
 module.exports = {
   getClient: () => client,
@@ -28,5 +33,22 @@ module.exports = {
     // if any of that wasn't true, go ahead and set it
     authors[author] = { name, setter }
   },
-  getAuthors: () => authors
+  getAuthors: () => authors,
+  isPrivateMode: () => currentMode === constants.MODE.PRIVATE,
+  setPrivateMode: () => {
+    privateMessages = []
+    currentMode = constants.MODE.PRIVATE
+  },
+  setPublicMode: () => {
+    privateMessages = []
+    currentMode = constants.MODE.PUBLIC
+  },
+  pushPublicMessage: (msg) => messages.push(msg),
+  getPublicMessages: () => messages,
+  getPrivateMessages: () => privateMessages,
+  pushPrivateMessage: (msg) => privateMessages.push(msg),
+  pushMessage: (msg) => {
+    if (currentMode === constants.MODE.PRIVATE) privateMessages.push(msg)
+    messages.push(msg)
+  }
 }

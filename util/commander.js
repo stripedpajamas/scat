@@ -1,5 +1,10 @@
 const client = require('./client')
 const modules = require('../modules')
+const mode = require('./constants').MODE
+const messenger = require('./messenger')
+
+let currentMode = mode.PUBLIC
+let recipients
 
 const commands = {
   // /pub invite-code
@@ -12,6 +17,11 @@ const commands = {
     return modules.invite(line[1])
       .then(() => resolve('Pub joined successfully'))
       .catch(() => reject(new Error('Could not join pub')))
+  }),
+  // :q 
+  '/q': (line) => new Promise((resolve) => {
+    client.setPublicMode()
+    return resolve()
   }),
   // /name name
   '/name': (line) => new Promise((resolve, reject) => {
