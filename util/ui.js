@@ -71,37 +71,40 @@ input.on('ctrl-c', () => {
   process.exit(0)
 })
 
+// header describing mode and potentially private recipients
+const header = () => {
+  const mode = client.getMode()
+  const isPrivate = client.isPrivateMode()
+  const recipients = client.getPrivateRecipientNames()
+  return `:: ${mode} MODE ${isPrivate ? `(${recipients.join(', ')}) ` : ''}::`
+}
+
 const prompter = () => (
-  diffy.render(() => trim(`
-    ${client.getMessages().map(m => `${m.time}  ${m.text()}`).join('\n')}
-    > ${input.line()}
-  `))
+  diffy.render(() => {
+    const messages = client.getMessages()
+    // i only want messages to take up about 75% of the screen
+    const slim = messages.slice(Math.floor(messages.length - (diffy.height * 0.75)))
+    return trim(`
+      ${header()}
+      ${slim.map(m => `${m.time}  ${m.text()}`).join('\n')}
+      > ${input.line()}
+    `)
+  })
 )
 
 const printMsg = (msg) => {
-  const message = {
-    author: () => client.getAuthor(msg.author),
-    rawAuthor: msg.author,
-    text: () =>
-      `${`${c.bold[color(msg.author)](client.getAuthor(msg.author))} : ${msg.private ? `${c.bgGreen(msg.content.text)}` : msg.content.text}`}`,
-    rawText: msg.content.text,
-    time: `${`${c.gray.dim(format(msg.timestamp, fmt))}`}`,
-    rawTime: msg.timestamp
-  }
-  if (client.isPrivateMode() && msg.private) {
-    client.pushPrivateMessage(message)
-  } else {
-    client.pushPublicMessage(message)
-  }
-}
-
-const printSelfMsg = (msg) => {
+  const fromMe = msg.author === client.getMe()
+  const authorText = () => c.bold[fromMe ? 'green' : color(msg.author)](client.getAuthor(msg.author))
+  const messageText = () => msg.private ? `${c.bgGreen(msg.content.text)}` : msg.content.text
+  const timeText = `${c.gray.dim(format(msg.timestamp, fmt))}`
   client.pushMessage({
     author: () => client.getAuthor(msg.author),
     rawAuthor: msg.author,
-    text: () => `${`${c.bold.green(client.getAuthor(msg.author))} : ${msg.private ? `${c.bgGreen(msg.content.text)}` : msg.content.text}`}`,
+    private: msg.private,
+    recipients: msg.content.recipients,
+    text: () => `${`${authorText()} : ${messageText()}`}`,
     rawText: msg.content.text,
-    time: `${`${c.gray.dim(format(msg.timestamp, fmt))}`}`,
+    time: `${timeText}`,
     rawTime: msg.timestamp
   })
 }
@@ -127,13 +130,10 @@ const printErrMsg = (error) => {
 
 const setup = () => {
   prompter()
-  setInterval(() => diffy.render(), 1000)
+  setInterval(() => diffy.render(), 100)
 }
 
 module.exports = {
   setup,
-  prompter,
-  printMsg,
-  printSelfMsg,
-  printSysMsg
+  printMsg
 }

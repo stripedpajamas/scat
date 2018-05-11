@@ -1,9 +1,10 @@
-let constants = require('./constants')
+const constants = require('./constants')
+const sort = require('./sort')
 
 let me
 let client
 let messages = []
-let privateMessages = []
+let privateRecipients = []
 let currentMode = constants.MODE.PUBLIC
 const authors = {}
 
@@ -34,32 +35,36 @@ module.exports = {
   },
   getAuthors: () => authors,
   // message mode stuff here
+  getMode: () => currentMode,
   isPrivateMode: () => currentMode === constants.MODE.PRIVATE,
-  setPrivateMode: () => {
-    privateMessages = []
-    currentMode = constants.MODE.PRIVATE
-  },
-  setPublicMode: () => {
-    privateMessages = []
-    currentMode = constants.MODE.PUBLIC
-  },
-  pushPublicMessage: (msg) => messages.push(msg),
-  getPublicMessages: () => messages,
-  pushPrivateMessage: (msg) => privateMessages.push(msg),
-  getPrivateMessages: () => privateMessages,
-  // generic pusher for generic stuff
+  setPrivateMode: () => { currentMode = constants.MODE.PRIVATE },
+  setPublicMode: () => { currentMode = constants.MODE.PUBLIC },
   pushMessage: (msg) => {
-    if (currentMode === constants.MODE.PRIVATE) {
-      privateMessages.push(msg)
-      return
-    }
     messages.push(msg)
+    // since private messages are processed async
+    // we need to re-sort the messages array after receiving one
+    if (msg.private) {
+      sort(messages)
+    }
   },
-  // generic getter for generic stuff
   getMessages: () => {
     if (currentMode === constants.MODE.PRIVATE) {
-      return privateMessages
+      // if in private mode, only show messages that are either from
+      // the person/people i am in private mode with
+      // OR from me that i sent to people i'm in private mode with
+      // unfortunately because of how private messages work
+      // this means i have to put the recipients list in the private scat message
+      // will make note of this in the readme
+      return messages.filter(msg => {
+        const fromMe = msg.rawAuthor === me
+        const inPrivateRecipients = privateRecipients.includes(msg.rawAuthor)
+        const sentToYou = msg.recipients && msg.recipients.some(recipient => privateRecipients.includes(recipient))
+        return msg.private && (inPrivateRecipients || (fromMe && sentToYou))
+      })
     }
-    return messages
-  }
+    return messages.filter(msg => !msg.private)
+  },
+  getPrivateRecipients: () => privateRecipients,
+  setPrivateRecipients: (recipients) => { privateRecipients = recipients },
+  getPrivateRecipientNames: () => privateRecipients.map(r => (authors[r] || {}).name || r)
 }

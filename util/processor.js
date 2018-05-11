@@ -29,11 +29,7 @@ const processor = (msg) => {
         }
         break
       case constants.MESSAGE_TYPE:
-        if (m.author === me) {
-          ui.printSelfMsg(m)
-        } else {
-          ui.printMsg(m)
-        }
+        ui.printMsg(m)
         break
       default:
         break
