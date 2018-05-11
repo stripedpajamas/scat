@@ -1,4 +1,4 @@
-const client = require('./client')
+const state = require('./state')
 const modules = require('../modules')
 
 const commands = {
@@ -15,7 +15,7 @@ const commands = {
   }),
   // /quit leaves private mode if in it
   '/quit': (line) => new Promise((resolve) => {
-    client.setPublicMode()
+    state.setPublicMode()
     return resolve()
   }),
   // /name name
@@ -27,6 +27,11 @@ const commands = {
     return modules.about(line[1])
       .then(() => resolve('Name set successfully'))
       .catch(() => reject(new Error('Could not set name')))
+  }),
+  '/notifications': () => new Promise((resolve, reject) => {
+    const notifications = state.getNotifications().map(n => n.recipients).join('; ')
+    const notificationText = `Unread messages from: ${notifications}`
+    return resolve(notifications ? notificationText : 'No unread messages')
   }),
   // /identify id name
   '/identify': (line) => new Promise((resolve, reject) => {
@@ -69,7 +74,7 @@ const commands = {
     if (line.length < 2) {
       return resolve('To get someone\'s id: /whois name')
     }
-    return resolve(client.getAuthorId(line[1]))
+    return resolve(state.getAuthorId(line[1]))
   })
 }
 

@@ -1,10 +1,10 @@
-const client = require('../util/client')
+const state = require('../util/state')
 const constants = require('../util/constants')
 
 module.exports = (text, recipients) => {
   return new Promise((resolve, reject) => {
-    const sbot = client.getClient()
-    const me = client.getMe()
+    const sbot = state.getClient()
+    const me = state.getMe()
 
     // make sure we can read the message
     const actualRecipients = recipients.slice()

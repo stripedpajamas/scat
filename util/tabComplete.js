@@ -1,8 +1,8 @@
-const client = require('./client')
+const state = require('./state')
 const commander = require('./commander')
 
 const author = (partial) => {
-  const authors = client.getAuthors()
+  const authors = state.getAuthors()
   const names = Object.values(authors).map(obj => obj.name)
 
   return names.filter(name => name.startsWith(partial))

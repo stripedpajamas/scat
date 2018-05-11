@@ -1,16 +1,16 @@
 const ref = require('ssb-ref')
-const client = require('../util/client')
+const state = require('../util/state')
 const constants = require('../util/constants')
 
 module.exports = (name, who) => {
   return new Promise((resolve, reject) => {
-    const sbot = client.getClient()
-    const me = client.getMe()
+    const sbot = state.getClient()
+    const me = state.getMe()
     let target = who || me
 
     // if this is a name and not an id, look up the id in our author map
     if (!ref.isFeedId(target)) {
-      target = client.getAuthor(target)
+      target = state.getAuthor(target)
     }
 
     if (sbot && target && name) {

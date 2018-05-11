@@ -3,12 +3,12 @@ const pull = require('pull-stream')
 const party = require('ssb-party')
 const constants = require('./util/constants')
 const ui = require('./util/ui')
-const client = require('./util/client')
+const state = require('./util/state')
 const processor = require('./util/processor')
 
 process.on('uncaughtException', () => {
   console.log('\n\nUncaught exception, exiting :(')
-  const sbot = client.getClient()
+  const sbot = state.getClient()
   sbot && sbot.control && typeof sbot.control.stop === 'function' && sbot.control.stop()
   process.exit(1)
 })
@@ -24,8 +24,8 @@ party(opts, (err, sbot) => {
   }
 
   // set our sbot instance and our self
-  client.setClient(sbot)
-  client.setMe(sbot.id)
+  state.setClient(sbot)
+  state.setMe(sbot.id)
 
   // start streaming abouts
   pull(

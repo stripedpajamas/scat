@@ -1,11 +1,11 @@
 const constants = require('./constants')
-const client = require('./client')
+const state = require('./state')
 const modules = require('../modules')
 const ui = require('./ui')
 
 const processor = (msg) => {
   const m = msg.value
-  const me = client.getMe()
+  const me = state.getMe()
 
   if (m && m.content) {
     // first see if we are dealing with an encrypted message
@@ -24,7 +24,7 @@ const processor = (msg) => {
         if (m.content.about && m.content.name) {
           // only honor self-identification or my own identification of someone else
           if (m.author === m.content.about || m.author === me) {
-            client.setAuthor(m.content.about, m.content.name, m.author)
+            state.setAuthor(m.content.about, m.content.name, m.author)
           }
         }
         break
