@@ -30,9 +30,6 @@ pete : not much
 # to identify someone else:
 > /identify @id name
 
-# to send a private message:
-> /private @id,...,@id msg
-
 # to follow someone
 > /follow @id
 
@@ -40,11 +37,36 @@ pete : not much
 > /unfollow @id
 
 # to look up someone's id
-> /whois name
+> /whois @name
 
 # to look up your own id
 > /whoami
+
+# to see unread notifications
+> /notifications
+
+# to reset unread notifications
+> /read
+
+# to quit private mode (see below)
+> /quit
 ```
+
+### private messaging
+scat supports sending private messages. so as not to muddy up the view with public and private messages, scat has you switch contexts by typing the name(s) of the private recipient(s) you want to converse with. 
+
+example: 
+```bash
+> @joel # I want to send and receive private messages with Joel now
+> hello # only visible to Joel
+...
+> /quit # I want to return to public messaging
+...
+> @joel @kev # I want to send and receive private messages with both Joel and Kev
+...
+```
+
+`/quit` returns you to the public context. scat will notify you when someone has sent you a private message (if you are in the public context or in the private context with a different user).
 
 ### what's happening
 scat uses a special message type `scat_message`. this means that if you're using something like [Patchwork](https://github.com/ssbc/patchwork), your feed won't be all gobbled up by chat messages. And scat won't be all gobbled up by your posts. 

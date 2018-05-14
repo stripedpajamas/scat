@@ -81,7 +81,8 @@ const header = () => {
   const rightHeaderText = notification.length && `Private msg from: ${notification.join(', ') || ''}`
   const leftHeader = isPrivate ? `${c.bgBlack.white(leftHeaderText)}` : `${c.bgWhite.black(leftHeaderText)}`
   const rightHeader = `${c.bgYellow.black(rightHeaderText)}`
-  const spacer = ' '.repeat(diffy.width - leftHeaderText.length - rightHeaderText.length)
+  const spacerWidth = diffy.width - leftHeaderText.length - rightHeaderText.length
+  const spacer = ' '.repeat(spacerWidth > 0 ? spacerWidth : 1)
   return `${leftHeader}${spacer}${rightHeader}`
 }
 
