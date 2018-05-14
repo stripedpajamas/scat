@@ -130,6 +130,7 @@ const clearNotification = (recipients) => {
     !(notification.rawRecipients.length === recipients.length && notification.rawRecipients.every(r => recipients.includes(r)))
   ))
 }
+const resetNotifications = () => { notifications = [] }
 
 module.exports = {
   getClient,
@@ -155,5 +156,6 @@ module.exports = {
   resetPrivateRecipients,
   getNotifications,
   getLastNotification,
-  clearNotification
+  clearNotification,
+  resetNotifications
 }
