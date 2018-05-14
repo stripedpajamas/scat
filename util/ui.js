@@ -88,11 +88,13 @@ const header = () => {
 const prompter = () => (
   diffy.render(() => {
     const messages = state.getMessages()
+    const systemMessage = state.getSystemMessage()
     // i only want messages to take up about 75% of the screen
-    const slim = messages.slice(Math.floor(messages.length - (diffy.height * 0.75)))
+    let slim = messages.slice(Math.floor(messages.length - (diffy.height * 0.75)))
     return trim(`
       ${header()}
       ${slim.map(m => `${m.time}  ${m.text()}`).join('\n')}
+      ${systemMessage ? `${systemMessage.time}  ${systemMessage.text()}` : ''}
       > ${input.line()}
     `)
   })
@@ -116,7 +118,7 @@ const printMsg = (msg) => {
 }
 
 const printSysMsg = (msg) => {
-  state.pushMessage({
+  state.pushSystemMessage({
     text: () => `${`${c.bold.yellow(msg)}`}`,
     rawText: msg,
     time: `${`${c.gray.dim(format(Date.now(), fmt))}`}`,

@@ -7,6 +7,7 @@ let messages = []
 let privateRecipients = []
 let notifications = []
 let currentMode = constants.MODE.PUBLIC
+let systemMessage = null
 const authors = {}
 
 /* client */
@@ -43,14 +44,20 @@ const setAuthor = (author, name, setter) => {
 /* mode */
 const getMode = () => currentMode
 const isPrivateMode = () => currentMode === constants.MODE.PRIVATE
-const setPrivateMode = () => { currentMode = constants.MODE.PRIVATE }
+const setPrivateMode = () => {
+  currentMode = constants.MODE.PRIVATE
+  resetSystemMessage()
+}
 const setPublicMode = () => {
   currentMode = constants.MODE.PUBLIC
-  privateRecipients = []
+  resetPrivateRecipients()
+  resetSystemMessage()
 }
 
 /* message */
 const pushMessage = (msg) => {
+  // if a new message comes in, clear any system messages so things don't get confusing
+  resetSystemMessage()
   messages.push(msg)
   // since private messages are processed async
   // we need to re-sort the messages array after receiving one
@@ -101,6 +108,9 @@ const getMessages = () => {
   }
   return messages.filter(msg => !msg.private)
 }
+const pushSystemMessage = (msg) => { systemMessage = msg }
+const getSystemMessage = () => systemMessage
+const resetSystemMessage = () => { systemMessage = null }
 
 /* recipients */
 const getPrivateRecipients = () => privateRecipients
@@ -109,6 +119,7 @@ const setPrivateRecipients = (recipients) => {
   setPrivateMode()
   clearNotification(recipients)
 }
+const resetPrivateRecipients = () => { privateRecipients = [] }
 const getPrivateRecipientNames = () => privateRecipients.map(getAuthor)
 
 /* notifications */
@@ -135,9 +146,13 @@ module.exports = {
   setPublicMode,
   pushMessage,
   getMessages,
+  pushSystemMessage,
+  getSystemMessage,
+  resetSystemMessage,
   getPrivateRecipients,
   getPrivateRecipientNames,
   setPrivateRecipients,
+  resetPrivateRecipients,
   getNotifications,
   getLastNotification,
   clearNotification
