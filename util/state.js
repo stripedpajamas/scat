@@ -44,7 +44,10 @@ const setAuthor = (author, name, setter) => {
 const getMode = () => currentMode
 const isPrivateMode = () => currentMode === constants.MODE.PRIVATE
 const setPrivateMode = () => { currentMode = constants.MODE.PRIVATE }
-const setPublicMode = () => { currentMode = constants.MODE.PUBLIC }
+const setPublicMode = () => {
+  currentMode = constants.MODE.PUBLIC
+  privateRecipients = []
+}
 
 /* message */
 const pushMessage = (msg) => {
@@ -66,9 +69,6 @@ const pushMessage = (msg) => {
       // and we aren't in private mode
       // or we are in private mode but with other people
       if (!isPrivateMode() || !talkingToThem) {
-        // setTimeout(() => {
-        //   console.log('we are not talking to', notificationRecipients, privateRecipients)
-        // }, 2000)
         const alreadyNotified = notifications.some(
           n => n.rawRecipients.length === notificationRecipients.length && n.rawRecipients.every(r => notificationRecipients.includes(r))
         )
@@ -106,6 +106,7 @@ const getMessages = () => {
 const getPrivateRecipients = () => privateRecipients
 const setPrivateRecipients = (recipients) => {
   privateRecipients = recipients
+  setPrivateMode()
   clearNotification(recipients)
 }
 const getPrivateRecipientNames = () => privateRecipients.map(getAuthor)

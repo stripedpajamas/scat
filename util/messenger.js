@@ -7,7 +7,6 @@ const setPrivateRecipients = (line) => new Promise((resolve, reject) => {
     return reject(new Error('You can only send a private message to up to 7 recipients'))
   }
   const ids = recipients.map(r => state.getAuthorId(r))
-  state.setPrivateMode()
   state.setPrivateRecipients(ids)
   resolve()
 })
