@@ -66,10 +66,7 @@ const pushMessage = (msg) => {
 
     // also if this wasn't sent by us
     if (msg.recipients && msg.rawAuthor !== me) {
-      // first take me off the recipients list
-      const notificationRecipients = msg.recipients.filter(r => r !== me)
-      // and then put the author in there
-      notificationRecipients.push(msg.rawAuthor)
+      const notificationRecipients = msg.recipients.filter(r => r !== getMe())
 
       const talkingToThem = notificationRecipients.length === privateRecipients.length && notificationRecipients.every(privateRecipients.includes)
 
@@ -100,10 +97,10 @@ const getMessages = () => {
     // this means i have to put the recipients list in the private scat message
     // will make note of this in the readme
     return messages.filter(msg => {
-      const fromMe = msg.rawAuthor === me
-      const inPrivateRecipients = privateRecipients.includes(msg.rawAuthor)
-      const sentToYou = msg.recipients && msg.recipients.some(recipient => privateRecipients.includes(recipient))
-      return msg.private && (inPrivateRecipients || (fromMe && sentToYou))
+      const fromPrivateRecipient = privateRecipients.includes(msg.rawAuthor)
+      const recipientsPlusAuthor = (msg.recipients && msg.recipients.concat(msg.rawAuthor)) || []
+      const allRecipientsValid = privateRecipients.every(r => recipientsPlusAuthor.includes(r))
+      return msg.private && (fromPrivateRecipient && allRecipientsValid)
     })
   }
   return messages.filter(msg => !msg.private)
@@ -115,12 +112,14 @@ const resetSystemMessage = () => { systemMessage = null }
 /* recipients */
 const getPrivateRecipients = () => privateRecipients
 const setPrivateRecipients = (recipients) => {
-  privateRecipients = recipients
-  setPrivateMode()
   clearNotification(recipients)
+  privateRecipients = recipients
+  privateRecipients.push(me)
+  setPrivateMode()
 }
 const resetPrivateRecipients = () => { privateRecipients = [] }
 const getPrivateRecipientNames = () => privateRecipients.map(getAuthor)
+const getPrivateRecipientsNotMe = () => privateRecipients.filter(pr => pr !== getMe()).map(getAuthor)
 
 /* notifications */
 const getNotifications = () => notifications
@@ -152,6 +151,7 @@ module.exports = {
   resetSystemMessage,
   getPrivateRecipients,
   getPrivateRecipientNames,
+  getPrivateRecipientsNotMe,
   setPrivateRecipients,
   resetPrivateRecipients,
   getNotifications,

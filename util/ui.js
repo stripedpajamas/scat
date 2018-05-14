@@ -75,7 +75,7 @@ input.on('ctrl-c', () => {
 const header = () => {
   const mode = state.getMode()
   const isPrivate = state.isPrivateMode()
-  const recipients = state.getPrivateRecipientNames()
+  const recipients = state.getPrivateRecipientsNotMe()
   const leftHeaderText = `:: ${mode} MODE ${isPrivate ? `(${recipients.join(', ')}) ` : ''}::`
   const notification = state.getLastNotification().recipients || []
   const rightHeaderText = notification.length && `Private msg from: ${notification.join(', ') || ''}`
