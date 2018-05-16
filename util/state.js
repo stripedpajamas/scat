@@ -68,7 +68,7 @@ const pushMessage = (msg) => {
     if (msg.recipients && msg.rawAuthor !== me) {
       const notificationRecipients = msg.recipients.filter(r => r !== getMe())
 
-      const talkingToThem = notificationRecipients.length === privateRecipients.length && notificationRecipients.every(privateRecipients.includes)
+      const talkingToThem = notificationRecipients.length === privateRecipients.length && notificationRecipients.every(r => privateRecipients.includes(r))
 
       // and we aren't in private mode
       // or we are in private mode but with other people
@@ -98,7 +98,7 @@ const getMessages = () => {
     // will make note of this in the readme
     return messages.filter(msg => {
       const fromPrivateRecipient = privateRecipients.includes(msg.rawAuthor)
-      const recipientsPlusAuthor = (msg.recipients && msg.recipients.concat(msg.rawAuthor)) || []
+      const recipientsPlusAuthor = msg.recipients || []
       const allRecipientsValid = privateRecipients.every(r => recipientsPlusAuthor.includes(r))
       return msg.private && (fromPrivateRecipient && allRecipientsValid)
     })
@@ -130,8 +130,11 @@ const getPrivateRecipientsNotMe = () => privateRecipients.filter(pr => pr !== ge
 const getNotifications = () => notifications
 const getLastNotification = () => notifications[notifications.length - 1] || {}
 const clearNotification = (recipients) => {
+  // when we create a notification, we leave off our own username
+  // so to clear a notification we need to take our own username off the criteria
+  const filteredRecipients = recipients.filter(r => r !== getMe())
   notifications = notifications.filter((notification) => (
-    !(notification.rawRecipients.length === recipients.length && notification.rawRecipients.every(r => recipients.includes(r)))
+    !(notification.rawRecipients.length === filteredRecipients.length && notification.rawRecipients.every(r => filteredRecipients.includes(r)))
   ))
 }
 const resetNotifications = () => { notifications = [] }
