@@ -112,9 +112,14 @@ const resetSystemMessage = () => { systemMessage = null }
 /* recipients */
 const getPrivateRecipients = () => privateRecipients
 const setPrivateRecipients = (recipients) => {
-  clearNotification(recipients)
-  privateRecipients = recipients
-  privateRecipients.push(me)
+  const uniqueRecipients = new Set(recipients)
+  uniqueRecipients.add(me)
+
+  const recipientsArray = [...uniqueRecipients]
+
+  clearNotification(recipientsArray)
+  privateRecipients = recipientsArray
+
   setPrivateMode()
 }
 const resetPrivateRecipients = () => { privateRecipients = [] }
