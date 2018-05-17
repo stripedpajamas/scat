@@ -1,5 +1,6 @@
 const constants = require('./constants')
 const sort = require('./sort')
+const compare = require('./compare')
 
 let me
 let client
@@ -68,21 +69,19 @@ const pushMessage = (msg) => {
     if (msg.recipients && msg.rawAuthor !== me) {
       const notificationRecipients = msg.recipients.filter(r => r !== getMe())
 
-      const talkingToThem = notificationRecipients.length === privateRecipients.length && notificationRecipients.every(r => privateRecipients.includes(r))
+      // see if we're currently in private mode with the recipients
+      const talkingToThem = compare(privateRecipients, notificationRecipients)
 
-      // and we aren't in private mode
+      // if we aren't in private mode
       // or we are in private mode but with other people
       if (!isPrivateMode() || !talkingToThem) {
-        const alreadyNotified = notifications.some(
-          n => n.rawRecipients.length === notificationRecipients.length && n.rawRecipients.every(r => notificationRecipients.includes(r))
-        )
+        // see if these recipients are already in a notification
+        const alreadyNotified = notifications.some(n => compare(n, notificationRecipients))
 
-        // and we haven't already notified about this user sending us something
+        // if we haven't already notified about this user sending us something
         if (!alreadyNotified) {
-          notifications.push({
-            recipients: notificationRecipients.map(getAuthor),
-            rawRecipients: notificationRecipients
-          })
+          // then push a notification
+          notifications.push(notificationRecipients)
         }
       }
     }
@@ -96,12 +95,7 @@ const getMessages = () => {
     // unfortunately because of how private messages work
     // this means i have to put the recipients list in the private scat message
     // will make note of this in the readme
-    return messages.filter(msg => {
-      const fromPrivateRecipient = privateRecipients.includes(msg.rawAuthor)
-      const recipientsPlusAuthor = msg.recipients || []
-      const allRecipientsValid = privateRecipients.every(r => recipientsPlusAuthor.includes(r))
-      return msg.private && (fromPrivateRecipient && allRecipientsValid)
-    })
+    return messages.filter(msg => msg.private && compare(msg.recipients || [], privateRecipients))
   }
   return messages.filter(msg => !msg.private)
 }
@@ -123,19 +117,16 @@ const setPrivateRecipients = (recipients) => {
   setPrivateMode()
 }
 const resetPrivateRecipients = () => { privateRecipients = [] }
-const getPrivateRecipientNames = () => privateRecipients.map(getAuthor)
 const getPrivateRecipientsNotMe = () => privateRecipients.filter(pr => pr !== getMe()).map(getAuthor)
 
 /* notifications */
 const getNotifications = () => notifications
-const getLastNotification = () => notifications[notifications.length - 1] || {}
+const getLastNotification = () => notifications[notifications.length - 1] || []
 const clearNotification = (recipients) => {
   // when we create a notification, we leave off our own username
   // so to clear a notification we need to take our own username off the criteria
   const filteredRecipients = recipients.filter(r => r !== getMe())
-  notifications = notifications.filter((notification) => (
-    !(notification.rawRecipients.length === filteredRecipients.length && notification.rawRecipients.every(r => filteredRecipients.includes(r)))
-  ))
+  notifications = notifications.filter(notificationRecipients => !compare(filteredRecipients, notificationRecipients))
 }
 const resetNotifications = () => { notifications = [] }
 
@@ -158,7 +149,6 @@ module.exports = {
   getSystemMessage,
   resetSystemMessage,
   getPrivateRecipients,
-  getPrivateRecipientNames,
   getPrivateRecipientsNotMe,
   setPrivateRecipients,
   resetPrivateRecipients,

@@ -77,8 +77,9 @@ const header = () => {
   const isPrivate = state.isPrivateMode()
   const recipients = state.getPrivateRecipientsNotMe()
   const leftHeaderText = `:: ${mode} MODE ${isPrivate ? `(${recipients.join(', ')}) ` : ''}::`
-  const notification = state.getLastNotification().recipients || []
-  const rightHeaderText = notification.length && `Private msg from: ${notification.join(', ') || ''}`
+  const notification = state.getLastNotification() || []
+  const notificationRecipients = notification ? notification.map(state.getAuthor).join(', ') : ''
+  const rightHeaderText = notificationRecipients && `Private msg from: ${notificationRecipients}`
   const leftHeader = isPrivate ? `${c.bgBlack.white(leftHeaderText)}` : `${c.bgWhite.black(leftHeaderText)}`
   const rightHeader = `${c.bgYellow.black(rightHeaderText)}`
   const spacerWidth = diffy.width - leftHeaderText.length - rightHeaderText.length

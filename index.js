@@ -6,12 +6,12 @@ const ui = require('./util/ui')
 const state = require('./util/state')
 const processor = require('./util/processor')
 
-process.on('uncaughtException', () => {
-  console.log('\n\nUncaught exception, exiting :(')
-  const sbot = state.getClient()
-  sbot && sbot.control && typeof sbot.control.stop === 'function' && sbot.control.stop()
-  process.exit(1)
-})
+// process.on('uncaughtException', () => {
+//   console.log('\n\nUncaught exception, exiting :(')
+//   const sbot = state.getClient()
+//   sbot && sbot.control && typeof sbot.control.stop === 'function' && sbot.control.stop()
+//   process.exit(1)
+// })
 
 const opts = { party: { out: false, err: false }, timers: { keepalive: 10 } }
 const hr = 60 * 60 * 1000
