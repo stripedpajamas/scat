@@ -46,7 +46,7 @@ pete : not much
 > /notifications
 
 # to reset unread notifications
-> /read
+> /clear
 
 # to quit private mode (see below)
 > /quit

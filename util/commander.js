@@ -33,7 +33,7 @@ const commands = {
     const notificationText = `Unread messages from: ${notifications}`
     return resolve(notifications ? notificationText : 'No unread messages')
   }),
-  '/read': () => new Promise((resolve, reject) => {
+  '/clear': () => new Promise((resolve, reject) => {
     state.resetNotifications()
     resolve('Notifications reset')
   }),

@@ -67,15 +67,14 @@ const pushMessage = (msg) => {
 
     // also if this wasn't sent by us
     if (msg.recipients && msg.rawAuthor !== me) {
-      const notificationRecipients = msg.recipients.filter(r => r !== getMe())
-
       // see if we're currently in private mode with the recipients
-      const talkingToThem = compare(privateRecipients, notificationRecipients)
+      const talkingToThem = compare(privateRecipients, msg.recipients)
 
       // if we aren't in private mode
       // or we are in private mode but with other people
       if (!isPrivateMode() || !talkingToThem) {
         // see if these recipients are already in a notification
+        const notificationRecipients = msg.recipients.filter(r => r !== me)
         const alreadyNotified = notifications.some(n => compare(n, notificationRecipients))
 
         // if we haven't already notified about this user sending us something
