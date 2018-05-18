@@ -68,7 +68,7 @@ example:
 
 `/quit` returns you to the public context. scat will notify you when someone has sent you a private message (if you are in the public context or in the private context with a different user).
 
-one caveat to make this a kind of ok chatting experience is that scat messages have the recipient ids in the content of private messages. private messages in a typical scuttlebutt scenario do not leak the recipient list even to legitimate recipients. we are adding a field with the recipient list to the private message so that the ui is friendlier.
+the ui makes all of this a lot more obvious than this readme :)
 
 ### what's happening
 scat uses a special message type `scat_message`. this means that if you're using something like [Patchwork](https://github.com/ssbc/patchwork), your feed won't be all gobbled up by chat messages. And scat won't be all gobbled up by your posts. 

@@ -12,7 +12,7 @@ const tabComplete = require('./tabComplete')
 const fmt = 'MMM DD HH:mm A'
 let tabCompleter = null
 
-const diffy = Diffy({ fullscreen: true })
+const diffy = Diffy({ fullscreen: false })
 const input = Input({ showCursor: true })
 
 // populate input with last message sent by me when i hit up
@@ -111,7 +111,7 @@ const printMsg = (msg) => {
     author: () => state.getAuthor(msg.author),
     rawAuthor: msg.author,
     private: msg.private,
-    recipients: msg.content.recipients,
+    recipients: msg.content.recps || msg.content.recipients, // backwards compatibility
     text: () => `${`${authorText()} : ${msg.content.text}`}`,
     rawText: msg.content.text,
     time: `${timeText}`,

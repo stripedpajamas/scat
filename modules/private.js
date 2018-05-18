@@ -7,7 +7,7 @@ module.exports = (text, recipients) => {
     // recipients always has me because it's populated by state.privateRecipients
 
     if (sbot && text) {
-      sbot.private.publish({ type: constants.MESSAGE_TYPE, text, recipients }, recipients, (err, msg) => {
+      sbot.private.publish({ type: constants.MESSAGE_TYPE, text, recps: recipients }, recipients, (err, msg) => {
         if (err) return reject(err)
         resolve(msg)
       })
