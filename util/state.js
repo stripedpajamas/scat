@@ -5,7 +5,9 @@ const compare = require('./compare')
 let me
 let client
 let messages = []
+let filteredMessages = []
 let privateRecipients = []
+let filteredPrivateRecipients = []
 let notifications = []
 let currentMode = constants.MODE.PUBLIC
 let systemMessage = null
@@ -40,6 +42,9 @@ const setAuthor = (author, name, setter) => {
   }
   // if any of that wasn't true, go ahead and set it
   authors[author] = { name: cleanName, setter }
+
+  // we now potentially have a new author, so refresh the message view
+  refreshMessageFilter()
 }
 
 /* mode */
@@ -48,14 +53,29 @@ const isPrivateMode = () => currentMode === constants.MODE.PRIVATE
 const setPrivateMode = () => {
   currentMode = constants.MODE.PRIVATE
   resetSystemMessage()
+  refreshMessageFilter()
 }
 const setPublicMode = () => {
   currentMode = constants.MODE.PUBLIC
   resetPrivateRecipients()
   resetSystemMessage()
+  refreshMessageFilter()
 }
 
 /* message */
+const refreshMessageFilter = () => {
+  if (isPrivateMode()) {
+    // if in private mode, only show messages that are either from
+    // the person/people i am in private mode with
+    // OR from me that i sent to people i'm in private mode with
+    // unfortunately because of how private messages work
+    // this means i have to put the recipients list in the private scat message
+    // will make note of this in the readme
+    filteredMessages = messages.filter(msg => msg.private && compare(msg.recipients || [], privateRecipients))
+    return
+  }
+  filteredMessages = messages.filter(msg => !msg.private)
+}
 const pushMessage = (msg) => {
   // if a new message comes in, clear any system messages so things don't get confusing
   resetSystemMessage()
@@ -85,19 +105,11 @@ const pushMessage = (msg) => {
       }
     }
   }
+
+  // and whenever a messages comes in, we should fire off a refresh on our filtered view
+  refreshMessageFilter()
 }
-const getMessages = () => {
-  if (isPrivateMode()) {
-    // if in private mode, only show messages that are either from
-    // the person/people i am in private mode with
-    // OR from me that i sent to people i'm in private mode with
-    // unfortunately because of how private messages work
-    // this means i have to put the recipients list in the private scat message
-    // will make note of this in the readme
-    return messages.filter(msg => msg.private && compare(msg.recipients || [], privateRecipients))
-  }
-  return messages.filter(msg => !msg.private)
-}
+const getMessages = () => filteredMessages
 const pushSystemMessage = (msg) => { systemMessage = msg }
 const getSystemMessage = () => systemMessage
 const resetSystemMessage = () => { systemMessage = null }
@@ -113,10 +125,17 @@ const setPrivateRecipients = (recipients) => {
   clearNotification(recipientsArray)
   privateRecipients = recipientsArray
 
+  refreshFilteredPrivateRecipients()
   setPrivateMode()
 }
-const resetPrivateRecipients = () => { privateRecipients = [] }
-const getPrivateRecipientsNotMe = () => privateRecipients.filter(pr => pr !== getMe()).map(getAuthor)
+const refreshFilteredPrivateRecipients = () => {
+  filteredPrivateRecipients = privateRecipients.filter(pr => pr !== getMe()).map(getAuthor)
+}
+const resetPrivateRecipients = () => {
+  privateRecipients = []
+  refreshFilteredPrivateRecipients()
+}
+const getPrivateRecipientsNotMe = () => filteredPrivateRecipients
 
 /* notifications */
 const getNotifications = () => notifications
@@ -142,6 +161,7 @@ module.exports = {
   isPrivateMode,
   setPrivateMode,
   setPublicMode,
+  refreshMessageFilter,
   pushMessage,
   getMessages,
   pushSystemMessage,
@@ -149,6 +169,7 @@ module.exports = {
   resetSystemMessage,
   getPrivateRecipients,
   getPrivateRecipientsNotMe,
+  refreshFilteredPrivateRecipients,
   setPrivateRecipients,
   resetPrivateRecipients,
   getNotifications,
