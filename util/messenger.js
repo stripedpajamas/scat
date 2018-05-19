@@ -22,12 +22,12 @@ const sendPublicMessage = (msg) => new Promise((resolve, reject) => {
 })
 
 module.exports = {
-  sendMessage: (line) => new Promise((resolve, reject) => {
+  sendMessage: (line) => {
     if (state.isPrivateMode()) {
       return sendPrivateMessage(line)
     } else if (line[0] === '@') {
       return setPrivateRecipients(line)
     }
     return sendPublicMessage(line)
-  })
+  }
 }

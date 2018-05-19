@@ -29,7 +29,7 @@ const commands = {
       .catch(() => reject(new Error('Could not set name')))
   }),
   '/notifications': () => new Promise((resolve, reject) => {
-    const notifications = state.getNotifications().map(n => n.recipients).join('; ')
+    const notifications = state.getNotifications().map(state.getAuthor).join('; ')
     const notificationText = `Unread messages from: ${notifications}`
     return resolve(notifications ? notificationText : 'No unread messages')
   }),
@@ -90,6 +90,8 @@ module.exports = {
       return commands[command](line)
         .then((print) => resolve({ command: true, print }))
         .catch(reject)
+    } else if (command[0] === '/') {
+      return resolve({ command: false, print: 'Invalid command. Type / and tab to cycle through options.' })
     }
     return resolve({})
   }),
