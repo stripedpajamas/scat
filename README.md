@@ -1,6 +1,9 @@
 # :mouse: scat :mouse:
 tiny chat-like cli built on scuttlebutt
 
+![screenshot](images/screenshot.png)
+
+
 more on scuttlebutt: https://www.scuttlebutt.nz/
 
 potentially chat with friends on the same network without even being connected to the internet :raised_hands:
