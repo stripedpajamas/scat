@@ -1,3 +1,4 @@
+const ref = require('ssb-ref')
 const state = require('./state')
 const modules = require('../modules')
 
@@ -72,6 +73,21 @@ const commands = {
     return modules.whoami()
       .then((id) => resolve(id))
       .catch(() => reject(new Error('Could not figure out who you are')))
+  }),
+  '/private': (line) => new Promise((resolve, reject) => {
+    if (line.length < 2) {
+      return reject(new Error('You must specify recipients: /private @recipient1, @recipient2, ...'))
+    }
+    const recipients = line.slice(1).join(' ').split(',').map(x => x.trim())
+    if (recipients.length > 6) {
+      return reject(new Error('You can only send a private message to up to 7 recipients'))
+    }
+    const ids = recipients.map(r => state.getAuthorId(r))
+    if (!ids.every(id => ref.isFeedId(id))) {
+      return reject(new Error('Could not determine feed ids for all recipients'))
+    }
+    state.setPrivateRecipients(ids)
+    resolve()
   }),
   // /whois returns the id of an already-identified individual
   '/whois': (line) => new Promise((resolve, reject) => {
