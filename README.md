@@ -51,21 +51,24 @@ pete : not much
 # to reset unread notifications
 > /clear
 
-# to quit private mode (see below)
+# to enter private mode
+> /private @recipient1, @recipient2, ...
+
+# to quit private mode
 > /quit
 ```
 
 ### private messaging
-scat supports sending private messages. so as not to muddy up the view with public and private messages, scat has you switch contexts by typing the name(s) of the private recipient(s) you want to converse with. 
+scat supports sending private messages. so as not to muddy up the view with public and private messages, scat has you switch contexts by typing `/private` and then the name(s) (comma separated) of the private recipient(s) you want to converse with. 
 
 example: 
 ```bash
-> @joel # I want to send and receive private messages with Joel now
+> /private @joel # I want to send and receive private messages with Joel now
 > hello # only visible to Joel
 ...
 > /quit # I want to return to public messaging
 ...
-> @joel @kev # I want to send and receive private messages with both Joel and Kev
+> /private @joel, @kev # I want to send and receive private messages with both Joel and Kev
 ...
 ```
 
@@ -79,8 +82,6 @@ scat uses a special message type `scat_message`. this means that if you're using
 but since it's all the same protocol and all the same feeds, all the same people are there. scat looks for `about` messages to show a user's name instead of their id, but falls back to the id if necessary.
 
 scat will honor self-identification above a 3rd party's identification of another user, and scat will honor your identification of another user above their own self-identification. a 3rd party's identification of another user is not honored at all.
-
-scat supports sending private scat messages. it will auto-add your id to the recipients list so that you are able to see your own private messages. 
 
 ### license
 MIT
