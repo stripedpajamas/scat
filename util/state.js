@@ -80,11 +80,9 @@ const pushMessage = (msg) => {
   // if a new message comes in, clear any system messages so things don't get confusing
   resetSystemMessage()
   messages.push(msg)
-  // since private messages are processed async
-  // we need to re-sort the messages array after receiving one
+  // we have to resort because messages don't always come in ordered properly
+  sort(messages)
   if (msg.private) {
-    sort(messages)
-
     // also if this wasn't sent by us
     if (msg.recipients && msg.rawAuthor !== me) {
       // see if we're currently in private mode with the recipients

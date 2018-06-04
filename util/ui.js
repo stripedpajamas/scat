@@ -9,7 +9,7 @@ const color = require('./color')
 const messenger = require('./messenger')
 const tabComplete = require('./tabComplete')
 
-const fmt = 'MMM DD HH:mm A'
+const fmt = 'MMM DD HH:mm'
 let tabCompleter = null
 
 const diffy = Diffy({ fullscreen: true })
