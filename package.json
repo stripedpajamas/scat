@@ -1,6 +1,6 @@
 {
   "name": "ssb-chat",
-  "version": "1.3.2",
+  "version": "1.4.0",
   "description": "scuttlebutt chat",
   "main": "index.js",
   "bin": {
