@@ -1,7 +1,7 @@
 const constants = require('./constants')
-const sort = require('./sort')
 const compare = require('./compare')
 
+// #region initial state
 let me
 let client
 let messages = []
@@ -10,18 +10,22 @@ let privateRecipients = []
 let filteredPrivateRecipients = []
 let notifications = []
 let currentMode = constants.MODE.PUBLIC
+let privateMessageRoot = null
 let systemMessage = null
 const authors = {}
+// #endregion
 
-/* client */
+// #region client actions
 const getClient = () => client
 const setClient = (c) => { client = c }
+// #endregion
 
-/* me */
+// #region me actions
 const getMe = () => me
 const setMe = (m) => { me = m }
+// #endregion
 
-/* author */
+// #region author actions
 const getAuthor = (author) => (authors[author] || {}).name || author
 const getAuthors = () => authors
 const getAuthorId = (name) => Object.keys(authors).find(author =>
@@ -46,14 +50,24 @@ const setAuthor = (author, name, setter) => {
   // we now potentially have a new author, so refresh the message view
   refreshMessageFilter()
 }
+// #endregion
 
-/* mode */
+// #region mode actions
 const getMode = () => currentMode
 const isPrivateMode = () => currentMode === constants.MODE.PRIVATE
 const setPrivateMode = () => {
   currentMode = constants.MODE.PRIVATE
   resetSystemMessage()
   refreshMessageFilter()
+
+  // we want to get the message id of the latest message
+  // in this private thread, and use that as the root for future messages
+  // but if there is no 'latest message' in this thread, we'll
+  // set the root after first message sent
+  const lastMessage = filteredMessages[filteredMessages.length - 1]
+  if (lastMessage) {
+    privateMessageRoot = lastMessage.key
+  }
 }
 const setPublicMode = () => {
   currentMode = constants.MODE.PUBLIC
@@ -61,16 +75,29 @@ const setPublicMode = () => {
   resetSystemMessage()
   refreshMessageFilter()
 }
+// #endregion
 
-/* message */
+// #region message actions
+const addMessageInPlace = (msg) => {
+  const timestamp = msg.rawTime
+  // handle edge case
+  if (!messages.length || messages[messages.length - 1].rawTime < timestamp) {
+    messages.push(msg)
+    return
+  }
+  // find lowest nearest
+  for (let i = 0; i < messages.length; i++) {
+    if (messages[i].rawTime >= timestamp) {
+      messages.splice(i, 0, msg)
+      return
+    }
+  }
+}
 const refreshMessageFilter = () => {
   if (isPrivateMode()) {
     // if in private mode, only show messages that are either from
     // the person/people i am in private mode with
     // OR from me that i sent to people i'm in private mode with
-    // unfortunately because of how private messages work
-    // this means i have to put the recipients list in the private scat message
-    // will make note of this in the readme
     filteredMessages = messages.filter(msg => msg.private && compare(msg.recipients || [], privateRecipients))
     return
   }
@@ -79,10 +106,18 @@ const refreshMessageFilter = () => {
 const pushMessage = (msg) => {
   // if a new message comes in, clear any system messages so things don't get confusing
   resetSystemMessage()
-  messages.push(msg)
-  // we have to resort because messages don't always come in ordered properly
-  sort(messages)
+
+  // instead of pushing a message onto the back of the array,
+  // we need to put it in the perfect place based on timestamp
+  addMessageInPlace(msg)
+
   if (msg.private) {
+    // if we don't already have a root for private messages in this chat,
+    // and we're in private mode at this time, we can use this message as the new root
+    if (isPrivateMode() && !privateMessageRoot) {
+      privateMessageRoot = msg.key
+    }
+
     // also if this wasn't sent by us
     if (msg.recipients && msg.rawAuthor !== me) {
       // see if we're currently in private mode with the recipients
@@ -111,8 +146,10 @@ const getMessages = () => filteredMessages
 const pushSystemMessage = (msg) => { systemMessage = msg }
 const getSystemMessage = () => systemMessage
 const resetSystemMessage = () => { systemMessage = null }
+const getPrivateMessageRoot = () => privateMessageRoot
+// #endregion
 
-/* recipients */
+// #region recipient actions
 const getPrivateRecipients = () => privateRecipients
 const setPrivateRecipients = (recipients) => {
   const uniqueRecipients = new Set(recipients)
@@ -131,11 +168,13 @@ const refreshFilteredPrivateRecipients = () => {
 }
 const resetPrivateRecipients = () => {
   privateRecipients = []
+  privateMessageRoot = null
   refreshFilteredPrivateRecipients()
 }
 const getPrivateRecipientsNotMe = () => filteredPrivateRecipients
+// #endregion
 
-/* notifications */
+// #region notification actions
 const getNotifications = () => notifications
 const getLastNotification = () => notifications[notifications.length - 1] || []
 const clearNotification = (recipients) => {
@@ -145,6 +184,7 @@ const clearNotification = (recipients) => {
   notifications = notifications.filter(notificationRecipients => !compare(filteredRecipients, notificationRecipients))
 }
 const resetNotifications = () => { notifications = [] }
+// #endregion
 
 module.exports = {
   getClient,
@@ -165,6 +205,7 @@ module.exports = {
   pushSystemMessage,
   getSystemMessage,
   resetSystemMessage,
+  getPrivateMessageRoot,
   getPrivateRecipients,
   getPrivateRecipientsNotMe,
   refreshFilteredPrivateRecipients,

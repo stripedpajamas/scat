@@ -9,12 +9,12 @@ const processor = (msg) => {
 
   if (m && m.content) {
     // first see if we are dealing with an encrypted message
-    if (typeof m.content === 'string') {
+    if (typeof m.content === 'string' || m.private) {
       modules.unbox(m.content)
         .then((content) => {
           const decryptedMsg = msg
           decryptedMsg.value.content = content
-          decryptedMsg.value.private = true // so we can alter the ui
+          decryptedMsg.value.wasPrivate = true // so we can alter the ui
           return processor(decryptedMsg)
         })
         .catch(() => {}) // ignore failure to decrypt private messages
@@ -29,7 +29,7 @@ const processor = (msg) => {
         }
         break
       case constants.MESSAGE_TYPE:
-        ui.printMsg(m)
+        ui.printMsg(msg)
         break
       default:
         break

@@ -102,15 +102,17 @@ const prompter = () => (
   })
 )
 
-const printMsg = (msg) => {
+const printMsg = (m) => {
+  const msg = m.value
   const fromMe = msg.author === state.getMe()
   const authorText = () => c.bold[fromMe ? 'green' : color(msg.author)](state.getAuthor(msg.author))
   const timeText = `${c.gray.dim(format(msg.timestamp, fmt))}`
 
   state.pushMessage({
+    key: m.key,
     author: () => state.getAuthor(msg.author),
     rawAuthor: msg.author,
-    private: msg.private,
+    private: msg.wasPrivate,
     recipients: msg.content.recps || msg.content.recipients, // backwards compatibility
     text: () => `${`${authorText()} : ${msg.content.text}`}`,
     rawText: msg.content.text,
