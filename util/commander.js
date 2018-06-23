@@ -38,6 +38,11 @@ const commands = {
     state.resetNotifications()
     resolve('Notifications reset')
   }),
+  // /help show usage information
+  '/help': (line) => new Promise((resolve, reject) => {
+    return modules.help()
+      .then((info) => resolve(info))
+  }),
   // /identify id name
   '/identify': (line) => new Promise((resolve, reject) => {
     if (line.length < 3) {
