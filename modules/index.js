@@ -1,17 +1,19 @@
-const post = require('./post')
-const invite = require('./invite')
-const whoami = require('./whoami')
-const follow = require('./follow')
 const about = require('./about')
+const follow = require('./follow')
+const help = require('./help')
+const invite = require('./invite')
+const post = require('./post')
 const privatePost = require('./private')
 const unbox = require('./unbox')
+const whoami = require('./whoami')
 
 module.exports = {
   about,
-  post,
-  invite,
   follow,
-  whoami,
+  help,
+  invite,
+  post,
   private: privatePost,
-  unbox
+  unbox,
+  whoami
 }
