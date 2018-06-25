@@ -33,6 +33,12 @@ input.on('keypress', (_, key) => {
   if (key && key.name === 'escape') {
     input.set('')
   }
+  if (key && key.name === 'pageup') {
+    state.viewPageUp()
+  }
+  if (key && key.name === 'pagedown') {
+    state.viewPageDown()
+  }
 })
 
 // rerender while i type
@@ -71,12 +77,20 @@ input.on('ctrl-c', () => {
   process.exit(0)
 })
 
+// update state with dimensions on resize
+diffy.on('resize', () => {
+  state.setViewport(diffy.width, diffy.height)
+})
+
 // header describing mode and potentially private recipients
 const header = () => {
   const mode = state.getMode()
   const isPrivate = state.isPrivateMode()
+  const scrolling = state.getScrolling()
+  const isScrolling = scrolling.isScrolling
+  const atTop = scrolling.atTop
   const recipients = state.getPrivateRecipientsNotMe()
-  const leftHeaderText = `:: ${mode} MODE ${isPrivate ? `(${recipients.join(', ')}) ` : ''}::`
+  const leftHeaderText = `:: ${mode} MODE ${isPrivate ? `(${recipients.join(', ')}) ` : ''}:: ${isScrolling ? `(MESSAGE HISTORY${atTop ? ' - TOP' : ''})` : ''}`
   const notification = state.getLastNotification() || []
   const notificationRecipients = notification ? notification.map(state.getAuthor).join(', ') : ''
   const rightHeaderText = notificationRecipients && `Private msg from: ${notificationRecipients}`
@@ -89,13 +103,11 @@ const header = () => {
 
 const prompter = () => (
   diffy.render(() => {
-    const messages = state.getMessages()
+    const messages = state.getViewableMessages()
     const systemMessage = state.getSystemMessage()
-    // i only want messages to take up about 75% of the screen
-    let slim = messages.slice(Math.floor(messages.length - (diffy.height * 0.75)))
     return trim(`
       ${header()}
-      ${slim.map(m => `${m.time}  ${m.text()}`).join('\n')}
+      ${messages.join('\n')}
       ${systemMessage ? `${systemMessage.time}  ${systemMessage.text()}` : ''}
       > ${input.line()}
     `)
@@ -116,6 +128,9 @@ const printMsg = (m) => {
     recipients: msg.content.recps || msg.content.recipients, // backwards compatibility
     text: () => `${`${authorText()} : ${msg.content.text}`}`,
     rawText: msg.content.text,
+    lineLength: () => Math.ceil(
+      (fmt.length + 1 + state.getAuthor(msg.author).length + 3 + (msg.content.text.length || 0)) / diffy.width
+    ),
     time: `${timeText}`,
     rawTime: msg.timestamp
   })
@@ -141,6 +156,7 @@ const printErrMsg = (error) => {
 }
 
 const setup = () => {
+  state.setViewport(diffy.width, diffy.height)
   prompter()
   setInterval(() => diffy.render(), 100)
 }

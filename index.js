@@ -6,7 +6,7 @@ const ui = require('./util/ui')
 const state = require('./util/state')
 const processor = require('./util/processor')
 
-process.on('uncaughtException', () => {
+process.on('uncaughtException', (e) => {
   console.log('\n\nUncaught exception, exiting :(')
   const sbot = state.getClient()
   sbot && sbot.control && typeof sbot.control.stop === 'function' && sbot.control.stop()
@@ -15,7 +15,7 @@ process.on('uncaughtException', () => {
 
 const opts = { party: { out: false, err: false }, timers: { keepalive: 10 } }
 const hr = 60 * 60 * 1000
-const since = Date.now() - (10 * 24 * hr) // 1 week of data
+const since = Date.now() - (7 * 24 * hr) // 1 week of data
 
 party(opts, (err, sbot) => {
   if (err) {

@@ -4,8 +4,16 @@ const compare = require('./compare')
 // #region initial state
 let me
 let client
+let viewport = {}
+let scrolling = {
+  isScrolling: false,
+  atTop: false,
+  atBottom: true,
+  index: 0
+}
 let messages = []
 let filteredMessages = []
+let viewableMessages = []
 let privateRecipients = []
 let filteredPrivateRecipients = []
 let notifications = []
@@ -13,6 +21,61 @@ let currentMode = constants.MODE.PUBLIC
 let privateMessageRoot = null
 let systemMessage = null
 const authors = {}
+// #endregion
+
+// #region view actions
+const setViewport = (w, h) => {
+  viewport.w = w
+  viewport.h = h
+  viewport.showLines = h - 4
+}
+const viewPageUp = () => {
+  if (scrolling.atTop) return
+
+  scrolling.isScrolling = true
+  scrolling.index = (scrolling.index || filteredMessages.length) - viewableMessages.length - 1
+  // are we at the top? (would one more scroll up show no messages)
+  scrolling.atTop = (scrolling.index || filteredMessages.length) - viewableMessages.length - 1 < 1
+}
+const viewPageDown = () => {
+  if (scrolling.atBottom) return
+
+  if (scrolling.index >= 0) {
+    scrolling.index += Math.max(viewableMessages.length, viewport.h - viewableMessages.length)
+    scrolling.atTop = (scrolling.index || filteredMessages.length) - viewableMessages.length - 1 < 1
+  }
+}
+const getScrolling = () => scrolling
+const getViewableMessages = () => {
+  // determine where to start in the messages array
+  // if topShownIndex is null we're on the first page
+  let start = filteredMessages.length - 1
+  if (scrolling.isScrolling) {
+    if (scrolling.index > filteredMessages.length - 1) {
+      scrolling.atBottom = true
+      scrolling.isScrolling = false
+    } else {
+      start = scrolling.index
+      scrolling.atBottom = false
+    }
+  }
+
+  // set the viewable messages
+  const viewable = []
+  let viewableLines = 0
+
+  for (let i = start; i >= 0; i--) {
+    const currentLineLength = filteredMessages[i].lineLength()
+    if (viewableLines + currentLineLength > viewport.showLines) {
+      break
+    }
+    viewable.push(filteredMessages[i])
+    viewableLines += currentLineLength
+  }
+
+  viewableMessages = viewable.reverse().map(msg => `${msg.time}  ${msg.text()}`)
+  return viewableMessages
+}
 // #endregion
 
 // #region client actions
@@ -187,6 +250,9 @@ const resetNotifications = () => { notifications = [] }
 // #endregion
 
 module.exports = {
+  setViewport,
+  viewPageUp,
+  viewPageDown,
   getClient,
   setClient,
   getMe,
@@ -202,6 +268,8 @@ module.exports = {
   refreshMessageFilter,
   pushMessage,
   getMessages,
+  getViewableMessages,
+  getScrolling,
   pushSystemMessage,
   getSystemMessage,
   resetSystemMessage,
