@@ -58,6 +58,8 @@ pete : not much
 > /quit
 ```
 
+use the `PageUp`/`PageDown` keys to scroll through previous messages. The status bar at the top will display `MESSAGE HISTORY` when scrolling. scat works in a 7 day window of data to keep things snappy.
+
 ### private messaging
 scat supports sending private messages. so as not to muddy up the view with public and private messages, scat has you switch contexts by typing `/private` and then the name(s) (comma separated) of the private recipient(s) you want to converse with. 
 
