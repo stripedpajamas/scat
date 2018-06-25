@@ -27,7 +27,7 @@ const authors = {}
 const setViewport = (w, h) => {
   viewport.w = w
   viewport.h = h
-  viewport.showLines = h - 4
+  viewport.showLines = h - 6
 }
 const viewPageUp = () => {
   if (scrolling.atTop) return

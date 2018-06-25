@@ -1,33 +1,37 @@
 const ref = require('ssb-ref')
 const state = require('./state')
 const modules = require('../modules')
+const Constants = require('./constants')
 
 const commands = {
   // /pub invite-code
   '/pub': (line) => new Promise((resolve, reject) => {
     if (line.length < 2) {
-      return resolve('To join a pub: /pub invite-code')
+      return resolve(Constants.HELP.pub)
     }
 
     // attempt to join with the supplied invite code
     return modules.invite(line[1])
-      .then(() => resolve('Pub joined successfully'))
-      .catch(() => reject(new Error('Could not join pub')))
+      .then(() => resolve(Constants.COMMAND_TEXT.PUB.SUCCESS))
+      .catch(() => reject(new Error(Constants.COMMAND_TEXT.PUB.FAILURE)))
   }),
   // /quit leaves private mode if in it
   '/quit': (line) => new Promise((resolve) => {
+    if (!state.isPrivateMode()) {
+      return resolve(Constants.COMMAND_TEXT.QUIT.FROM_PUBLIC)
+    }
     state.setPublicMode()
     return resolve()
   }),
   // /name name
   '/name': (line) => new Promise((resolve, reject) => {
     if (line.length < 2) {
-      return resolve('To set your name: /name john')
+      return resolve(Constants.HELP.name)
     }
 
     return modules.about(line[1])
-      .then(() => resolve('Name set successfully'))
-      .catch(() => reject(new Error('Could not set name')))
+      .then(() => resolve(Constants.COMMAND_TEXT.NAME.SUCCESS))
+      .catch(() => reject(new Error(Constants.COMMAND_TEXT.NAME.FAILURE)))
   }),
   '/notifications': () => new Promise((resolve, reject) => {
     const notifications = state.getNotifications().map(state.getAuthor).join('; ')
@@ -40,23 +44,27 @@ const commands = {
   }),
   // /help show usage information
   '/help': (line) => new Promise((resolve, reject) => {
-    return modules.help()
-      .then((info) => resolve(info))
+    // if no argument passed in, send help summary
+    if (line.length < 2) {
+      return resolve(Constants.HELP.SUMMARY)
+    }
+
+    return resolve(Constants.HELP[line[1]] || Constants.HELP.NOT_FOUND)
   }),
   // /identify id name
   '/identify': (line) => new Promise((resolve, reject) => {
     if (line.length < 3) {
-      return resolve('To personally identify someone else: /identify @id name')
+      return resolve(Constants.HELP.identify)
     }
 
     return modules.about(line[2], line[1])
-      .then(() => resolve('Name set successfully'))
-      .catch(() => reject(new Error('Could not set name')))
+      .then(() => resolve(Constants.COMMAND_TEXT.NAME.SUCCESS))
+      .catch(() => reject(new Error(Constants.COMMAND_TEXT.NAME.FAILURE)))
   }),
   // /follow id
   '/follow': (line) => new Promise((resolve, reject) => {
     if (line.length < 2) {
-      return resolve('To follow someone: /follow @id')
+      return resolve(Constants.HELP.follow)
     }
 
     return modules.follow(line[1], true)
@@ -66,7 +74,7 @@ const commands = {
   // /unfollow id
   '/unfollow': (line) => new Promise((resolve, reject) => {
     if (line.length < 2) {
-      return resolve('To unfollow someone: /unfollow @id')
+      return resolve(Constants.HELP.unfollow)
     }
 
     return modules.follow(line[1], false)
@@ -77,19 +85,19 @@ const commands = {
   '/whoami': (line) => new Promise((resolve, reject) => {
     return modules.whoami()
       .then((id) => resolve(id))
-      .catch(() => reject(new Error('Could not figure out who you are')))
+      .catch(() => reject(new Error(Constants.COMMAND_TEXT.WHOAMI.FAILURE)))
   }),
   '/private': (line) => new Promise((resolve, reject) => {
     if (line.length < 2) {
-      return reject(new Error('You must specify recipients: /private @recipient1, @recipient2, ...'))
+      return reject(new Error(Constants.COMMAND_TEXT.PRIVATE.NO_RECIPIENTS))
     }
     const recipients = line.slice(1).join(' ').split(',').map(x => x.trim())
     if (recipients.length > 6) {
-      return reject(new Error('You can only send a private message to up to 7 recipients'))
+      return reject(new Error(Constants.COMMAND_TEXT.PRIVATE.TOO_MANY_RECIPIENTS))
     }
     const ids = recipients.map(r => state.getAuthorId(r))
     if (!ids.every(id => ref.isFeedId(id))) {
-      return reject(new Error('Could not determine feed ids for all recipients'))
+      return reject(new Error(Constants.COMMAND_TEXT.PRIVATE.INVALID_FEED_IDS))
     }
     state.setPrivateRecipients(ids)
     resolve()
@@ -97,7 +105,7 @@ const commands = {
   // /whois returns the id of an already-identified individual
   '/whois': (line) => new Promise((resolve, reject) => {
     if (line.length < 2) {
-      return resolve('To get someone\'s id: /whois name')
+      return resolve(Constants.HELP.whois)
     }
     return resolve(state.getAuthorId(line[1]))
   })
@@ -112,7 +120,7 @@ module.exports = {
         .then((print) => resolve({ command: true, print }))
         .catch(reject)
     } else if (command[0] === '/') {
-      return resolve({ command: false, print: 'Invalid command. Type / and tab to cycle through options.' })
+      return resolve({ command: false, print: Constants.COMMAND_TEXT.INVALID })
     }
     return resolve({})
   }),
