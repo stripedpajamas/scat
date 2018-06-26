@@ -8,6 +8,7 @@ const commander = require('./commander')
 const color = require('./color')
 const messenger = require('./messenger')
 const tabComplete = require('./tabComplete')
+const render = require('./renderer')
 
 const fmt = 'MMM DD HH:mm'
 let tabCompleter = null
@@ -119,6 +120,7 @@ const printMsg = (m) => {
   const fromMe = msg.author === state.getMe()
   const authorText = () => c.bold[fromMe ? 'green' : color(msg.author)](state.getAuthor(msg.author))
   const timeText = `${c.gray.dim(format(msg.timestamp, fmt))}`
+  const renderedMsg = render(msg.content.text)
 
   state.pushMessage({
     key: m.key,
@@ -126,7 +128,7 @@ const printMsg = (m) => {
     rawAuthor: msg.author,
     private: msg.wasPrivate,
     recipients: msg.content.recps || msg.content.recipients, // backwards compatibility
-    text: () => `${`${authorText()} : ${msg.content.text}`}`,
+    text: () => `${`${authorText()} : ${renderedMsg}`}`,
     rawText: msg.content.text,
     lineLength: () => Math.ceil(
       (fmt.length + 1 + state.getAuthor(msg.author).length + 3 + (msg.content.text.length || 0)) / diffy.width
