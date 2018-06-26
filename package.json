@@ -32,6 +32,7 @@
     "clorox": "^1.0.3",
     "date-fns": "^1.29.0",
     "diffy": "^2.0.0",
+    "node-emoji": "^1.8.1",
     "pull-stream": "^3.6.7",
     "ssb-party": "^0.5.1",
     "ssb-ref": "^2.11.1"
