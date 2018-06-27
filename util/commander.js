@@ -118,7 +118,7 @@ module.exports = {
     if (typeof commands[command] === 'function') {
       return commands[command](line)
         .then((print) => resolve({ command: true, print }))
-        .catch(reject)
+        .catch((e) => reject(e))
     } else if (command[0] === '/') {
       return resolve({ command: false, print: Constants.COMMAND_TEXT.INVALID })
     }

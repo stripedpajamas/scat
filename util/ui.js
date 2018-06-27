@@ -152,7 +152,7 @@ const printSysMsg = (msg) => {
 
 const printErrMsg = (error) => {
   const msg = error.message
-  state.pushMessage({
+  state.pushSystemMessage({
     text: () => `${`${c.bold.bgRed.white(msg)}`}`,
     rawText: msg,
     time: `${`${c.gray.dim(format(Date.now(), fmt))}`}`,

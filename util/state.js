@@ -65,12 +65,14 @@ const getViewableMessages = () => {
   let viewableLines = 0
 
   for (let i = start; i >= 0; i--) {
-    const currentLineLength = filteredMessages[i].lineLength()
-    if (viewableLines + currentLineLength > viewport.showLines) {
-      break
+    if (filteredMessages[i] && filteredMessages[i].lineLength) {
+      const currentLineLength = filteredMessages[i].lineLength()
+      if (viewableLines + currentLineLength > viewport.showLines) {
+        break
+      }
+      viewable.push(filteredMessages[i])
+      viewableLines += currentLineLength
     }
-    viewable.push(filteredMessages[i])
-    viewableLines += currentLineLength
   }
 
   viewableMessages = viewable.reverse().map(msg => `${msg.time}  ${msg.text()}`)
