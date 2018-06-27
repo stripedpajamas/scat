@@ -2,7 +2,8 @@ const colors = [
   'red',
   'blue',
   'magenta',
-  'cyan'
+  'cyan',
+  'yellow'
 ]
 
 const colorMap = {}
