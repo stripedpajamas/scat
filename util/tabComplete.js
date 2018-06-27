@@ -1,6 +1,9 @@
+const emojis = require('node-emoji')
 const state = require('./state')
 const commander = require('./commander')
-const emojis = require('node-emoji')
+
+const commands = Object.keys(commander.commands)
+const emojiList = Object.keys(emojis.emoji).map(e => `:${e}:`)
 
 const author = (partial) => {
   const authors = state.getAuthors()
@@ -9,12 +12,10 @@ const author = (partial) => {
 }
 
 const command = (partial) => {
-  const commands = Object.keys(commander.commands)
   return commands.filter(cmd => cmd.startsWith(partial))
 }
 
 const emoji = (partial) => {
-  const emojiList = Object.keys(emojis.emoji)
   return emojiList.filter(em => em.startsWith(partial))
 }
 
@@ -26,10 +27,8 @@ module.exports = (line) => {
 
   if (split.length === 1 && lastWord.indexOf('/') === 0) { // command
     matches = command(lastWord)
-  } else if (split.length === 1 && lastWord.indexOf(':') === 0) {
-    matches = emoji(lastWord.slice(1))
-    let idx = -1
-    return () => (matches.length && `:${matches[++idx % matches.length]}:`) || line
+  } else if (lastWord.indexOf(':') === 0) { // emoji
+    matches = emoji(lastWord)
   } else {
     // if they didn't include an @ symbol, put one on
     if (lastWord.indexOf('@') !== 0) {
