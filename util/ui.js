@@ -13,8 +13,11 @@ const render = require('./renderer')
 const fmt = 'MMM DD HH:mm'
 let tabCompleter = null
 
+const inputStyle = (start, cursor, end) =>
+  `${start}${c.white.bold('|')}${cursor || ''}${end}`
+
 const diffy = Diffy({ fullscreen: true })
-const input = Input({ showCursor: true })
+const input = Input({ style: inputStyle })
 
 // populate input with last message sent by me when i hit up
 input.on('up', () => {
