@@ -16,7 +16,7 @@ const command = (partial) => {
 }
 
 const emoji = (partial) => {
-  return emojiList.filter(em => em.startsWith(partial))
+  return emojiList.filter(em => em.startsWith(partial)).concat(emojiList.filter(em => em.includes(partial.slice(1))))
 }
 
 module.exports = (line) => {
