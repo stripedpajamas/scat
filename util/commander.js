@@ -1,6 +1,8 @@
 const ref = require('ssb-ref')
 const state = require('./state')
 const modules = require('../modules')
+const messenger = require('./messenger')
+const ui = require('./ui')
 const Constants = require('./constants')
 
 const commands = {
@@ -37,6 +39,12 @@ const commands = {
     const notifications = state.getNotifications().map(state.getAuthor).join('; ')
     const notificationText = `Unread messages from: ${notifications}`
     return resolve(notifications ? notificationText : 'No unread messages')
+  }),
+  '/say': (line) => new Promise((resolve, reject) => {
+    const restOfLine = line.slice(1).join(' ')
+    // send message
+    messenger.sendMessage(restOfLine).catch(ui.printErrMsg)
+    resolve()
   }),
   '/clear': () => new Promise((resolve, reject) => {
     state.resetNotifications()
