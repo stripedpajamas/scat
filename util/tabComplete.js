@@ -16,7 +16,20 @@ const command = (partial) => {
 }
 
 const emoji = (partial) => {
-  return emojiList.filter(em => em.startsWith(partial)).concat(emojiList.filter(em => em.includes(partial.slice(1))))
+  const possibleDups = {}
+  // finding emojis that start with the partial
+  // we want to show these as options first
+  const startEmojis = emojiList.filter(em => em.startsWith(partial))
+  // adding them to the duplicates object
+  startEmojis.forEach((e) => {
+    possibleDups[e] = true
+  })
+
+  // finding emojis that contain the partial
+  // removing emojis that start with the partial so there aren't duplicates
+  const partialEmojis = emojiList.filter(em => em.includes(partial.slice(1))).filter(em => !possibleDups[em])
+  // returning the emojis that start with the partial and then the emojis that contain the partial
+  return startEmojis.concat(partialEmojis)
 }
 
 module.exports = (line) => {
