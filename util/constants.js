@@ -6,6 +6,21 @@ module.exports = {
     PUBLIC: 'PUBLIC',
     PRIVATE: 'PRIVATE'
   },
+  COMMANDS: [
+    '/clear',
+    '/follow',
+    '/help',
+    '/identify',
+    '/name',
+    '/notifications',
+    '/private',
+    '/pub',
+    '/quit',
+    '/say',
+    '/unfollow',
+    '/whoami',
+    '/whois'
+  ],
   COMMAND_TEXT: {
     INVALID: 'Invalid command. Type / and tab to cycle through options or type /help for a list.',
     QUIT: {

@@ -1,8 +1,7 @@
 const emojis = require('node-emoji')
 const state = require('./state')
-const commander = require('./commander')
+const constants = require('./constants')
 
-const commands = Object.keys(commander.commands)
 const emojiList = Object.keys(emojis.emoji).map(e => `:${e}:`)
 
 const author = (partial) => {
@@ -12,7 +11,7 @@ const author = (partial) => {
 }
 
 const command = (partial) => {
-  return commands.filter(cmd => cmd.startsWith(partial))
+  return constants.COMMANDS.filter(cmd => cmd.startsWith(partial))
 }
 
 const emoji = (partial) => {

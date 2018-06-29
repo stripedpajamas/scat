@@ -51,7 +51,7 @@ input.on('update', () => diffy.render())
 // post a message or fire a command when i hit enter
 input.on('enter', (line) => {
   // handle /slash commands
-  commander.cmd(line)
+  commander(line)
     .then((response) => {
       if (response.print) {
         printSysMsg(response.print)
