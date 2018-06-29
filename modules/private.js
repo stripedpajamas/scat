@@ -1,7 +1,7 @@
 const state = require('../util/state')
 const constants = require('../util/constants')
 
-module.exports = (text, recipients) => {
+module.exports = ({ text, recipients, action }) => {
   return new Promise((resolve, reject) => {
     const sbot = state.getClient()
     const root = state.getPrivateMessageRoot() || undefined
@@ -15,6 +15,7 @@ module.exports = (text, recipients) => {
         type: constants.MESSAGE_TYPE,
         text,
         recps: recipients,
+        action,
         root
       }, recipients, (err, msg) => {
         if (err) return reject(err)

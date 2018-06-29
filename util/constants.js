@@ -24,7 +24,7 @@ module.exports = {
   COMMAND_TEXT: {
     INVALID: 'Invalid command. Type / and tab to cycle through options or type /help for a list.',
     QUIT: {
-      FROM_PUBLIC: '/quit leaves private mode. To exit the program press Control-C',
+      FROM_PUBLIC: '/quit leaves private mode. To exit the program press Control-C'
     },
     PUB: {
       SUCCESS: 'Pub joined successfully',
@@ -40,7 +40,7 @@ module.exports = {
     PRIVATE: {
       NO_RECIPIENTS: 'You must specify recipients: /private @recipient1, @recipient2, ...',
       TOO_MANY_RECIPIENTS: 'You can only send a private message to up to 7 recipients',
-      INVALID_FEED_IDS: 'Could not determine feed ids for all recipients',
+      INVALID_FEED_IDS: 'Could not determine feed ids for all recipients'
     }
   },
   HELP: {

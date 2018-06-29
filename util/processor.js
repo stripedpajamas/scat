@@ -29,6 +29,10 @@ const processor = (msg) => {
         }
         break
       case constants.MESSAGE_TYPE:
+        if (m.content.action) {
+          ui.printActionMsg(msg)
+          break
+        }
         ui.printMsg(msg)
         break
       default:

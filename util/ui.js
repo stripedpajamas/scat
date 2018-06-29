@@ -141,6 +141,32 @@ const printMsg = (m) => {
   })
 }
 
+// action messages are like `/me is washing the dishes`
+// it would look silly for that be like May 25 12:05 @squicc : @squicc is washing the dishes
+// so we want to spruce it up a little bit
+const printActionMsg = (m) => {
+  const msg = m.value
+  const fromMe = msg.author === state.getMe()
+  const authorText = () => c.bold[fromMe ? 'green' : color(msg.author)](state.getAuthor(msg.author))
+  const timeText = `${c.gray.dim(format(msg.timestamp, fmt))}`
+  const renderedMsg = c.bold[fromMe ? 'green' : color(msg.author)](render(msg.content.text))
+
+  state.pushMessage({
+    key: m.key,
+    author: () => state.getAuthor(msg.author),
+    rawAuthor: msg.author,
+    private: msg.wasPrivate,
+    recipients: msg.content.recps || msg.content.recipients, // backwards compatibility
+    text: () => `${`${authorText()} ${renderedMsg}`}`,
+    rawText: msg.content.text,
+    lineLength: () => Math.ceil(
+      (fmt.length + 1 + state.getAuthor(msg.author).length + 2 + (msg.content.text.length || 0)) / diffy.width
+    ),
+    time: `${timeText}`,
+    rawTime: msg.timestamp
+  })
+}
+
 const printSysMsg = (msg) => {
   state.pushSystemMessage({
     text: () => `${`${c.bold.yellow(msg)}`}`,
@@ -168,5 +194,8 @@ const setup = () => {
 
 module.exports = {
   setup,
-  printMsg
+  printMsg,
+  printSysMsg,
+  printErrMsg,
+  printActionMsg
 }
