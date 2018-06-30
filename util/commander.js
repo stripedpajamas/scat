@@ -136,7 +136,7 @@ module.exports = (input) => new Promise((resolve, reject) => {
     }
 
     default: {
-      if (command[0] === '/') {
+      if (command[0] === '/' && command != '/me') {
         return resolve({ command: false, print: Constants.COMMAND_TEXT.INVALID })
       }
       return resolve({})
