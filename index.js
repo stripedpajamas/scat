@@ -5,6 +5,16 @@ const constants = require('./util/constants')
 const ui = require('./util/ui')
 const state = require('./util/state')
 const processor = require('./util/processor')
+const updateNotifier = require('update-notifier')
+const pkg = require('./package.json')
+
+updateNotifier({
+  pkg,
+  updateCheckInterval: 1000 * 60 * 60 * 12 // 12 hours
+}).notify({
+  defer: true,
+  isGlobal: true
+})
 
 process.on('uncaughtException', (e) => {
   console.log('\n\nUncaught exception, exiting :(')

@@ -36,6 +36,7 @@
     "node-persist": "^2.1.0",
     "pull-stream": "^3.6.7",
     "ssb-party": "^0.5.1",
-    "ssb-ref": "^2.11.1"
+    "ssb-ref": "^2.11.1",
+    "update-notifier": "^2.5.0"
   }
 }
