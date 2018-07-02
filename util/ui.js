@@ -125,7 +125,7 @@ const printMsg = (m) => {
   const timeText = `${c.gray.dim(format(msg.timestamp, fmt))}`
   const renderedMsg = render(msg.content.text)
 
-  state.pushMessage({
+  return state.pushMessage({
     key: m.key,
     author: () => state.getAuthor(msg.author),
     rawAuthor: msg.author,
@@ -151,7 +151,7 @@ const printActionMsg = (m) => {
   const timeText = `${c.gray.dim(format(msg.timestamp, fmt))}`
   const renderedMsg = c.bold[fromMe ? 'green' : color(msg.author)](render(msg.content.text))
 
-  state.pushMessage({
+  return state.pushMessage({
     key: m.key,
     author: () => state.getAuthor(msg.author),
     rawAuthor: msg.author,
@@ -168,7 +168,7 @@ const printActionMsg = (m) => {
 }
 
 const printSysMsg = (msg) => {
-  state.pushSystemMessage({
+  return state.pushSystemMessage({
     text: () => `${`${c.bold.yellow(msg)}`}`,
     rawText: msg,
     time: `${`${c.gray.dim(format(Date.now(), fmt))}`}`,
@@ -178,7 +178,7 @@ const printSysMsg = (msg) => {
 
 const printErrMsg = (error) => {
   const msg = error.message
-  state.pushSystemMessage({
+  return state.pushSystemMessage({
     text: () => `${`${c.bold.bgRed.white(msg)}`}`,
     rawText: msg,
     time: `${`${c.gray.dim(format(Date.now(), fmt))}`}`,

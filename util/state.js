@@ -1,5 +1,6 @@
 const constants = require('./constants')
 const compare = require('./compare')
+const storage = require('./storage')
 
 // #region initial state
 let me
@@ -133,6 +134,9 @@ const setPrivateMode = () => {
   if (lastMessage) {
     privateMessageRoot = lastMessage.key
   }
+
+  // mark all messages in this conversation as read
+  markFilteredMessagesRead()
 }
 const setPublicMode = () => {
   currentMode = constants.MODE.PUBLIC
@@ -197,8 +201,12 @@ const pushMessage = (msg) => {
 
         // if we haven't already notified about this user sending us something
         if (!alreadyNotified) {
-          // then push a notification
-          notifications.push(notificationRecipients)
+          // and of course confirm that this message isn't already read
+          // based on saved read message keys on disk
+          if (!isRead(msg)) {
+            // then push a notification
+            notifications.push(notificationRecipients)
+          }
         }
       }
     }
@@ -249,6 +257,17 @@ const clearNotification = (recipients) => {
   notifications = notifications.filter(notificationRecipients => !compare(filteredRecipients, notificationRecipients))
 }
 const resetNotifications = () => { notifications = [] }
+// #endregion
+
+// #region read/unread actions
+const markAsRead = (message) => {
+  const ttl = (message.rawTime + constants.TIME_WINDOW) - Date.now()
+  storage.setItemSync(message.key, true, { ttl })
+}
+const markFilteredMessagesRead = () => {
+  filteredMessages.forEach(msg => markAsRead(msg))
+}
+const isRead = (message) => storage.getItemSync(message.key)
 // #endregion
 
 module.exports = {

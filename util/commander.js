@@ -64,7 +64,7 @@ module.exports = (input) => new Promise((resolve, reject) => {
     }
     // /notifications to get current unreads
     case '/notifications': {
-      const notifications = state.getNotifications().map(state.getAuthor).join('; ')
+      const notifications = state.getNotifications().map(recps => recps.map(state.getAuthor).join(', ')).join('; ')
       const notificationText = `Unread messages from: ${notifications}`
       return resolve({ command: true, print: notifications ? notificationText : 'No unread messages' })
     }

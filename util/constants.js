@@ -6,6 +6,8 @@ module.exports = {
     PUBLIC: 'PUBLIC',
     PRIVATE: 'PRIVATE'
   },
+  PROGRAM_DIR: '.scat',
+  TIME_WINDOW: 604800000,
   COMMANDS: [
     '/clear',
     '/follow',

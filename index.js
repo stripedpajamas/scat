@@ -14,8 +14,7 @@ process.on('uncaughtException', (e) => {
 })
 
 const opts = { party: { out: false, err: false }, timers: { keepalive: 10 } }
-const hr = 60 * 60 * 1000
-const since = Date.now() - (7 * 24 * hr) // 1 week of data
+const since = Date.now() - constants.TIME_WINDOW // 1 week of data
 
 party(opts, (err, sbot) => {
   if (err) {
