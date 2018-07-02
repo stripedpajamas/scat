@@ -6,6 +6,7 @@ module.exports = {
     PUBLIC: 'PUBLIC',
     PRIVATE: 'PRIVATE'
   },
+  TIME_FORMAT: 'MMM DD HH:mm',
   PROGRAM_DIR: '.scat',
   TIME_WINDOW: 604800000,
   COMMANDS: [

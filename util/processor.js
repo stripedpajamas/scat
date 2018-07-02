@@ -1,7 +1,7 @@
 const constants = require('./constants')
 const state = require('./state')
 const modules = require('../modules')
-const ui = require('./ui')
+const printer = require('./ui/printer')
 
 const processor = (msg) => {
   const m = msg.value
@@ -30,10 +30,10 @@ const processor = (msg) => {
         break
       case constants.MESSAGE_TYPE:
         if (m.content.action) {
-          ui.printActionMsg(msg)
+          printer.action(msg)
           break
         }
-        ui.printMsg(msg)
+        printer.message(msg)
         break
       default:
         break

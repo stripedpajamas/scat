@@ -30,6 +30,7 @@ const setViewport = (w, h) => {
   viewport.h = h
   viewport.showLines = h - 6
 }
+const getWidth = () => viewport.w
 const viewPageUp = () => {
   if (scrolling.atTop) return
 
@@ -290,6 +291,7 @@ module.exports = {
   pushMessage,
   getMessages,
   getViewableMessages,
+  getWidth,
   getScrolling,
   pushSystemMessage,
   getSystemMessage,

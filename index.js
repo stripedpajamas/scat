@@ -40,5 +40,5 @@ party(opts, (err, sbot) => {
   )
 
   // kick off the UI
-  ui.setup()
+  ui()
 })

@@ -3,7 +3,7 @@ const Constants = require('./constants')
 const state = require('./state')
 const modules = require('../modules')
 const messenger = require('./messenger')
-const ui = require('./ui')
+const printer = require('./ui/printer')
 
 module.exports = (input) => new Promise((resolve, reject) => {
   const line = input.split(' ')
@@ -48,7 +48,7 @@ module.exports = (input) => new Promise((resolve, reject) => {
     case '/me': {
       const restOfLine = line.slice(1).join(' ')
       // send message
-      messenger.sendAction(restOfLine).catch(ui.printErrMsg)
+      messenger.sendAction(restOfLine).catch(printer.error)
       return resolve({ command: true })
     }
     // /name name
@@ -108,7 +108,7 @@ module.exports = (input) => new Promise((resolve, reject) => {
     case '/say': {
       const restOfLine = line.slice(1).join(' ')
       // send message
-      messenger.sendMessage(restOfLine).catch(ui.printErrMsg)
+      messenger.sendMessage(restOfLine).catch(printer.error)
       return resolve({ command: true })
     }
     // /unfollow id
