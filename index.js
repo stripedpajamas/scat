@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 const pull = require('pull-stream')
-const party = require('ssb-party')
 const constants = require('./util/constants')
+const client = require('./util/client')
 const ui = require('./util/ui')
 const state = require('./util/state')
 const processor = require('./util/processor')
@@ -18,15 +18,14 @@ updateNotifier({
 
 process.on('uncaughtException', (e) => {
   console.log('\n\nUncaught exception, exiting :(')
-  const sbot = state.getClient()
-  sbot && sbot.control && typeof sbot.control.stop === 'function' && sbot.control.stop()
+  client.stop()
   process.exit(1)
 })
 
-const opts = { party: { out: false, err: false }, timers: { keepalive: 10 } }
+// const opts = {} // { party: { out: false, err: false }, timers: { keepalive: 10 } }
 const since = Date.now() - constants.TIME_WINDOW // 1 week of data
 
-party(opts, (err, sbot) => {
+client.start((err, sbot) => {
   if (err) {
     console.log(err)
     process.exit(1)

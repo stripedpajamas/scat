@@ -20,10 +20,10 @@ const message = (m) => {
     rawAuthor: msg.author,
     private: msg.wasPrivate,
     recipients: msg.content.recps || msg.content.recipients, // backwards compatibility
-    text: () => `${`${authorText()} : ${renderedMsg}`}`,
+    text: () => `${`${authorText()} ${renderedMsg}`}`,
     rawText: msg.content.text,
     lineLength: () => Math.ceil(
-      (constants.TIME_FORMAT.length + 1 + state.getAuthor(msg.author).length + 3 + (msg.content.text.length || 0)) / currentWidth
+      (constants.TIME_FORMAT.length + 1 + state.getAuthor(msg.author).length + 1 + (msg.content.text.length || 0)) / currentWidth
     ),
     time: `${timeText}`,
     rawTime: msg.timestamp
@@ -51,7 +51,7 @@ const action = (m) => {
     text: () => `${`${authorText()} ${renderedMsg}`}`,
     rawText: msg.content.text,
     lineLength: () => Math.ceil(
-      (constants.TIME_FORMAT.length + 1 + state.getAuthor(msg.author).length + 2 + (msg.content.text.length || 0)) / currentWidth
+      (constants.TIME_FORMAT.length + 2 + state.getAuthor(msg.author).length + 2 + (msg.content.text.length || 0)) / currentWidth
     ),
     time: `${timeText}`,
     rawTime: msg.timestamp

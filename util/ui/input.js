@@ -5,6 +5,7 @@ const commander = require('../commander')
 const messenger = require('../messenger')
 const tabComplete = require('../tabComplete')
 const printer = require('./printer')
+const client = require('../client')
 
 let tabCompleter = null
 
@@ -65,10 +66,7 @@ input.on('tab', () => {
 // exit gracefully when i hit control-c
 input.on('ctrl-c', () => {
   console.log('\n\nGoodbye\n')
-  const sbot = state.getClient()
-  if (sbot && sbot.control && typeof sbot.control.stop === 'function') {
-    sbot.control.stop()
-  }
+  client.stop()
   process.exit(0)
 })
 

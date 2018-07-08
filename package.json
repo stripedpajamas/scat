@@ -35,7 +35,10 @@
     "node-emoji": "^1.8.1",
     "node-persist": "^2.1.0",
     "pull-stream": "^3.6.7",
-    "ssb-party": "^0.5.1",
+    "scuttle-shell": "0.0.3",
+    "ssb-client": "^4.5.7",
+    "ssb-config": "^2.2.0",
+    "ssb-keys": "^7.0.16",
     "ssb-ref": "^2.11.1",
     "update-notifier": "^2.5.0"
   }
