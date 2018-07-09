@@ -7,7 +7,10 @@ const input = require('./input')
 const diffy = Diffy({ fullscreen: true })
 
 // rerender while i type
-input.on('update', () => diffy.render())
+input.on('update', () => {
+  diffy.render()
+  state.setInput(input.line())
+})
 
 // update state with dimensions on resize
 diffy.on('resize', () => {

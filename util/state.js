@@ -12,6 +12,7 @@ let scrolling = {
   atBottom: true,
   index: 0
 }
+let input = ''
 let messages = []
 let filteredMessages = []
 let viewableMessages = []
@@ -22,6 +23,16 @@ let currentMode = constants.MODE.PUBLIC
 let privateMessageRoot = null
 let systemMessage = null
 const authors = {}
+// #endregion
+
+// #region input actions
+const setInput = (value) => { input = value }
+const getInputLinesLength = () => {
+  // input length is `> `(2) + input.length
+  // how many lines is that in my terminal?
+  // Math.ceil(length / viewport.w)
+  return Math.ceil((2 + input.length) / viewport.w)
+}
 // #endregion
 
 // #region view actions
@@ -62,6 +73,8 @@ const getViewableMessages = () => {
     }
   }
 
+  const inputLines = getInputLinesLength()
+
   // set the viewable messages
   const viewable = []
   let viewableLines = 0
@@ -69,7 +82,8 @@ const getViewableMessages = () => {
   for (let i = start; i >= 0; i--) {
     if (filteredMessages[i] && filteredMessages[i].lineLength) {
       const currentLineLength = filteredMessages[i].lineLength()
-      if (viewableLines + currentLineLength > viewport.showLines) {
+      const totalLines = viewableLines + currentLineLength + inputLines
+      if (totalLines > viewport.showLines) {
         break
       }
       viewable.push(filteredMessages[i])
@@ -277,6 +291,8 @@ module.exports = {
   viewPageDown,
   getClient,
   setClient,
+  setInput,
+  getInputLinesLength,
   getMe,
   setMe,
   getAuthor,
