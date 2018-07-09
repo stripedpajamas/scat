@@ -1,5 +1,5 @@
 const path = require('path')
-const scuttleshell = require('scuttle-shell')
+const child = require('child_process')
 const config = require('ssb-config')
 const ssbKeys = require('ssb-keys')
 const client = require('ssb-client')
@@ -7,6 +7,7 @@ const client = require('ssb-client')
 config.keys = ssbKeys.loadOrCreateSync(path.join(config.path, 'secret'))
 
 let retriesRemaining = 5
+let server
 let started = false
 
 const tryConnect = (cb) => {
@@ -17,7 +18,15 @@ const tryConnect = (cb) => {
     if (err) {
       // start scuttle shell if haven't already tried starting it
       if (!started) {
-        scuttleshell.start()
+        server = child.fork(path.resolve(__dirname, './start'), {
+          stdio: [
+            'ignore',
+            'ignore',
+            'ignore',
+            'ipc'
+          ]
+        })
+        server.send({ config })
         started = true
       }
     }
@@ -49,9 +58,5 @@ module.exports = {
       }
     })
   },
-  stop: () => {
-    if (started) {
-      scuttleshell.stop()
-    }
-  }
+  stop: () => { server.send({ stop: true }) }
 }
