@@ -58,5 +58,9 @@ module.exports = {
       }
     })
   },
-  stop: () => { server.send({ stop: true }) }
+  stop: () => {
+    if (started) {
+      server.send({ stop: true })
+    }
+  }
 }

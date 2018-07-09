@@ -22,7 +22,6 @@ process.on('uncaughtException', (e) => {
   process.exit(1)
 })
 
-// const opts = {} // { party: { out: false, err: false }, timers: { keepalive: 10 } }
 const since = Date.now() - constants.TIME_WINDOW // 1 week of data
 
 client.start((err, sbot) => {
