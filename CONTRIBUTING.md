@@ -17,6 +17,12 @@ to run scat from source:
 npm start
 ```
 
+if during development scat just shuts down without error, it can be helpful to know what's going on. run scat with `--debug` to disable full screen and error swallowing:
+
+```bash
+npm start -- --debug
+```
+
 if you're playing around, i recommend either sending private messages to yourself (e.g. `/private @your-name`) or spinning up a new test SSB identity.
 i usually do the former, but when i need to do the latter, i copy `~/.ssb` to `~/.ssb-good`, so launching scat (which launches sbot) creates a new `~/.ssb` folder/indentity.
 

@@ -27,6 +27,14 @@ pete : not much
 
 if you have a notification in the top right corner, you can use `control-u` to cycle through your unread messages.
 
+### command line arguments
+by default scat pulls in 7 days of messages. if you want less or more, run scat with `--days`:
+
+```
+# this would pull in a month of data
+$ scat --days 30
+```
+
 ### commands
 **type `/help` for a list of commands. type `/help <cmd>` for more info on that command.**
 
