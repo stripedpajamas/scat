@@ -70,4 +70,17 @@ input.on('ctrl-c', () => {
   process.exit(0)
 })
 
+// cycle through unread messages when i press control-u
+input.on('ctrl-u', () => {
+  const unread = state.getLastNotification()
+  // if there are no unreads 
+  if (!unread.length) {
+    state.setPublicMode()
+    return
+  }
+
+  // if there are unreads, we want to go to private mode with those recipients
+  state.setPrivateRecipients(unread)
+})
+
 module.exports = input
