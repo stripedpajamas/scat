@@ -4,6 +4,7 @@ const compare = require('./compare')
 const storage = require('./storage')
 
 // #region initial state
+let args = {}
 let me
 let meNames = new Set()
 let client
@@ -25,6 +26,11 @@ let currentMode = constants.MODE.PUBLIC
 let privateMessageRoot = null
 let systemMessage = null
 const authors = {}
+// #endregion
+
+// #region args
+const getArgs = () => args
+const setArgs = (val) => { args = val }
 // #endregion
 
 // #region input actions
@@ -298,6 +304,8 @@ const isRead = (message) => storage.getItemSync(message.key)
 // #endregion
 
 module.exports = {
+  setArgs,
+  getArgs,
   setViewport,
   viewPageUp,
   viewPageDown,

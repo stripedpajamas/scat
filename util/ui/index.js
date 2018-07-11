@@ -4,7 +4,7 @@ const state = require('../state')
 const header = require('./header')
 const input = require('./input')
 
-const diffy = Diffy({ fullscreen: !process.argv.includes('--debug') })
+const diffy = Diffy({ fullscreen: !state.getArgs().debug })
 
 // rerender while i type
 input.on('update', () => {

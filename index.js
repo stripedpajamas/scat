@@ -1,11 +1,16 @@
 #!/usr/bin/env node
 const pull = require('pull-stream')
+const updateNotifier = require('update-notifier')
+const clp = require('clp')
+const state = require('./util/state')
+
+// set arguments in state before loading other modules
+state.setArgs(clp())
+
 const constants = require('./util/constants')
 const client = require('./util/client')
 const ui = require('./util/ui')
-const state = require('./util/state')
 const processor = require('./util/processor')
-const updateNotifier = require('update-notifier')
 const pkg = require('./package.json')
 
 updateNotifier({
@@ -17,7 +22,7 @@ updateNotifier({
 })
 
 process.on('uncaughtException', (e) => {
-  if (process.argv.includes('--debug')) {
+  if (state.getArgs().debug) {
     console.log(e)
   } else {
     console.log('\n\nUncaught exception, exiting :(')
@@ -26,7 +31,11 @@ process.on('uncaughtException', (e) => {
   process.exit(1)
 })
 
-const since = Date.now() - constants.TIME_WINDOW // 1 week of data
+let timeWindow = constants.TIME_WINDOW
+if (state.getArgs().days) {
+  timeWindow = state.getArgs().days * 24 * 60 * 60 * 1000
+}
+const since = Date.now() - timeWindow
 
 client.start((err, sbot) => {
   if (err) {

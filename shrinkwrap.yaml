@@ -1,5 +1,6 @@
 dependencies:
   clorox: 1.0.3
+  clp: 4.0.10
   date-fns: 1.29.0
   diffy: 2.0.0
   node-emoji: 1.8.1
@@ -521,6 +522,14 @@ packages:
     dev: false
     resolution:
       integrity: sha512-w3gKAUKMJYmmaJyc+p+iDrDtLvsFasrx/y6/zWo2U1TZfsz3y4Vl4T9PHCZrOwk1eMTOSRI6xHdpDR4PhTdy8Q==
+  /clp/4.0.10:
+    dependencies:
+      is-number: 2.1.0
+      last-char: 1.3.9
+      match-it: 1.0.7
+    dev: false
+    resolution:
+      integrity: sha512-V0fkt+ZL220YUUl8hgxxB6hQeOU8YsdfZ8jyJbanu77z3wri4CmYcmXdlJWjclWM9ASzXVps2eyVO616JcpxaA==
   /co/3.1.0:
     dev: false
     resolution:
@@ -2036,6 +2045,10 @@ packages:
       node: '>=0.10.0'
     resolution:
       integrity: sha512-s5kLOcnH0XqDO+FvuaLX8DDjZ18CGFk7VygH40QoKPUQhW4e2rvM0rwUq0t8IQDOwYSeLK01U90OjzBTme2QqA==
+  /last-char/1.3.9:
+    dev: false
+    resolution:
+      integrity: sha512-8jsWryUJCx06lnQCV+XjnHd4QxIvH3Flvzb9GDgA4iwkzj8VKl2iEP0IHrVJ+Ez1FWSt92BykXUDpn/f1CD+Mw==
   /latest-version/3.1.0:
     dependencies:
       package-json: 4.0.1
@@ -2302,6 +2315,10 @@ packages:
     dev: false
     resolution:
       integrity: sha1-iQwsGzv+g/sA5BKbjkz+ZFJw+dE=
+  /match-it/1.0.7:
+    dev: false
+    resolution:
+      integrity: sha1-tczwmRob1Z6CvtTN1MgFcT9AeRU=
   /math-random/1.0.1:
     dev: false
     resolution:
@@ -4490,6 +4507,7 @@ shrinkwrapMinorVersion: 8
 shrinkwrapVersion: 3
 specifiers:
   clorox: ^1.0.3
+  clp: ^4.0.10
   date-fns: ^1.29.0
   diffy: ^2.0.0
   node-emoji: ^1.8.1

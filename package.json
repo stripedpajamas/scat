@@ -30,6 +30,7 @@
   },
   "dependencies": {
     "clorox": "^1.0.3",
+    "clp": "^4.0.10",
     "date-fns": "^1.29.0",
     "diffy": "^2.0.0",
     "node-emoji": "^1.8.1",
