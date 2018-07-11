@@ -17,7 +17,11 @@ updateNotifier({
 })
 
 process.on('uncaughtException', (e) => {
-  console.log('\n\nUncaught exception, exiting :(')
+  if (process.argv.includes('--debug')) {
+    console.log(e)
+  } else {
+    console.log('\n\nUncaught exception, exiting :(')
+  }
   client.stop()
   process.exit(1)
 })

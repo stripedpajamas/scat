@@ -1,3 +1,4 @@
+const punycode = require('punycode')
 const constants = require('./constants')
 const compare = require('./compare')
 const storage = require('./storage')
@@ -44,7 +45,9 @@ const setViewport = (w, h) => {
 }
 const getWidth = () => viewport.w
 const viewPageUp = () => {
-  if (scrolling.atTop) return
+  if (scrolling.atTop || filteredMessages.length < viewport.showLines) {
+    return
+  }
 
   scrolling.isScrolling = true
   scrolling.index = (scrolling.index || filteredMessages.length) - viewableMessages.length - 1
@@ -62,7 +65,6 @@ const viewPageDown = () => {
 const getScrolling = () => scrolling
 const getViewableMessages = () => {
   // determine where to start in the messages array
-  // if topShownIndex is null we're on the first page
   let start = filteredMessages.length - 1
   if (scrolling.isScrolling) {
     if (scrolling.index > filteredMessages.length - 1) {
@@ -78,7 +80,7 @@ const getViewableMessages = () => {
 
   // set the viewable messages
   const viewable = []
-  let viewableLines = 0
+  let viewableLines = inputLines
 
   for (let i = start; i >= 0; i--) {
     if (filteredMessages[i] && filteredMessages[i].lineLength) {
@@ -114,7 +116,10 @@ const getAuthors = () => authors
 const getAuthorId = (name) => Object.keys(authors).find(author =>
   authors[author].name === name || authors[author].name === `@${name}`) || name
 const setAuthor = (author, name, setter) => {
-  let cleanName = name
+  if (typeof name !== 'string') {
+    return
+  }
+  let cleanName = punycode.toASCII(name.normalize('NFC')) // :eyeroll: dangerous beans
   if (cleanName[0] !== '@') {
     cleanName = `@${cleanName}`
   }

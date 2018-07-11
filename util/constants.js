@@ -8,7 +8,7 @@ module.exports = {
   },
   TIME_FORMAT: 'MMM DD HH:mm',
   PROGRAM_DIR: '.scat',
-  TIME_WINDOW: 604800000,
+  TIME_WINDOW: 7 * 24 * 60 * 60 * 1000,
   COMMANDS: [
     '/clear',
     '/follow',
