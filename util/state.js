@@ -4,6 +4,7 @@ const storage = require('./storage')
 
 // #region initial state
 let me
+let meNames = new Set()
 let client
 let viewport = {}
 let scrolling = {
@@ -104,6 +105,7 @@ const setClient = (c) => { client = c }
 // #region me actions
 const getMe = () => me
 const setMe = (m) => { me = m }
+const getMeNames = () => meNames
 // #endregion
 
 // #region author actions
@@ -115,6 +117,11 @@ const setAuthor = (author, name, setter) => {
   let cleanName = name
   if (cleanName[0] !== '@') {
     cleanName = `@${cleanName}`
+  }
+
+  // if this is about me, add it to my list of self ids
+  if (author === me) {
+    meNames.add(cleanName)
   }
   const alreadySet = authors[author]
   // if we already have this author set
@@ -294,6 +301,7 @@ module.exports = {
   setInput,
   getInputLinesLength,
   getMe,
+  getMeNames,
   setMe,
   getAuthor,
   getAuthors,

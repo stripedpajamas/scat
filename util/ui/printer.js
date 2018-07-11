@@ -5,6 +5,22 @@ const state = require('../state')
 const color = require('../color')
 const constants = require('../constants')
 
+const highlightMentions = (text) => {
+  // color me if i was mentioned
+  let highlighted = text
+  if (typeof highlighted === 'string') {
+    state.getMeNames().forEach((me) => {
+      highlighted = highlighted.split(' ').map((word) => {
+        if (word === me) {
+          return `${c.bgMagenta.black(word)}`
+        }
+        return word
+      }).join(' ')
+    })
+  }
+  return highlighted
+}
+
 const message = (m) => {
   const msg = m.value
   const fromMe = msg.author === state.getMe()
@@ -20,7 +36,7 @@ const message = (m) => {
     rawAuthor: msg.author,
     private: msg.wasPrivate,
     recipients: msg.content.recps || msg.content.recipients, // backwards compatibility
-    text: () => `${`${authorText()} ${renderedMsg}`}`,
+    text: () => `${`${authorText()} ${highlightMentions(renderedMsg)}`}`,
     rawText: msg.content.text,
     lineLength: () => Math.ceil(
       (constants.TIME_FORMAT.length + 1 + state.getAuthor(msg.author).length + 1 + (msg.content.text.length || 0)) / currentWidth
@@ -48,7 +64,7 @@ const action = (m) => {
     rawAuthor: msg.author,
     private: msg.wasPrivate,
     recipients: msg.content.recps || msg.content.recipients, // backwards compatibility
-    text: () => `${`${authorText()} ${renderedMsg}`}`,
+    text: () => `${`${authorText()} ${highlightMentions(renderedMsg)}`}`,
     rawText: msg.content.text,
     lineLength: () => Math.ceil(
       (constants.TIME_FORMAT.length + 2 + state.getAuthor(msg.author).length + 2 + (msg.content.text.length || 0)) / currentWidth
