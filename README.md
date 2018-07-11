@@ -23,7 +23,14 @@ joel : what's up
 pete : not much
 ...
 > type a message and hit enter and it will publish a scat_message to your feed
+```
 
+if you have a notification in the top right corner, you can use `control-u` to cycle through your unread messages.
+
+### commands
+**type `/help` for a list of commands. type `/help <cmd>` for more info on that command.**
+
+```
 # to join a pub server:
 > /pub invite-code
 
