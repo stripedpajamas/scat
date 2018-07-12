@@ -31,11 +31,10 @@ process.on('uncaughtException', (e) => {
   process.exit(1)
 })
 
-let timeWindow = constants.TIME_WINDOW
 if (state.getArgs().days) {
-  timeWindow = state.getArgs().days * 24 * 60 * 60 * 1000
+  state.setTimeWindow(state.getArgs().days * 24 * 60 * 60 * 1000)
 }
-const since = Date.now() - timeWindow
+const since = Date.now() - state.getTimeWindow()
 
 client.start((err, sbot) => {
   if (err) {

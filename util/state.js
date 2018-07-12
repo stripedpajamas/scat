@@ -5,6 +5,7 @@ const storage = require('./storage')
 
 // #region initial state
 let args = {}
+let timeWindow = constants.TIME_WINDOW
 let me
 let meNames = new Set()
 let client
@@ -30,9 +31,14 @@ let lastInput = ''
 const authors = {}
 // #endregion
 
-// #region args
+// #region args actions
 const getArgs = () => args
 const setArgs = (val) => { args = val }
+// #endregion
+
+// #region time window actions
+const getTimeWindow = () => timeWindow
+const setTimeWindow = (tw) => { timeWindow = tw }
 // #endregion
 
 // #region input actions
@@ -298,7 +304,7 @@ const resetNotifications = () => { notifications = [] }
 
 // #region read/unread actions
 const markAsRead = (message) => {
-  const ttl = (message.rawTime + constants.TIME_WINDOW) - Date.now()
+  const ttl = (message.rawTime + timeWindow) - Date.now()
   storage.setItemSync(message.key, true, { ttl })
 }
 const markFilteredMessagesRead = () => {
@@ -354,5 +360,7 @@ module.exports = {
   clearNotification,
   resetNotifications,
   getLastInput,
-  setLastInput
+  setLastInput,
+  getTimeWindow,
+  setTimeWindow
 }
