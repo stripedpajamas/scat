@@ -83,4 +83,15 @@ input.on('ctrl-u', () => {
   state.setPrivateRecipients(unread)
 })
 
+input.on('ctrl-t', () => {
+  if (state.isPrivateMode()) {
+    state.setPublicMode()
+    return
+  }
+
+  if (state.getLastPrivateRecipient().length) {
+    state.setPrivateRecipients(state.getLastPrivateRecipient())
+  }
+})
+
 module.exports = input
