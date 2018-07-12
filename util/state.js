@@ -20,6 +20,7 @@ let messages = []
 let filteredMessages = []
 let viewableMessages = []
 let privateRecipients = []
+let lastPrivateRecipient = []
 let filteredPrivateRecipients = []
 let notifications = []
 let currentMode = constants.MODE.PUBLIC
@@ -269,10 +270,12 @@ const setPrivateRecipients = (recipients) => {
   refreshFilteredPrivateRecipients()
   setPrivateMode()
 }
+const getLastPrivateRecipient = () => lastPrivateRecipient
 const refreshFilteredPrivateRecipients = () => {
   filteredPrivateRecipients = privateRecipients.filter(pr => pr !== getMe()).map(getAuthor)
 }
 const resetPrivateRecipients = () => {
+  lastPrivateRecipient = privateRecipients
   privateRecipients = []
   privateMessageRoot = null
   refreshFilteredPrivateRecipients()
@@ -336,6 +339,7 @@ module.exports = {
   getPrivateMessageRoot,
   getPrivateRecipients,
   getPrivateRecipientsNotMe,
+  getLastPrivateRecipient,
   refreshFilteredPrivateRecipients,
   setPrivateRecipients,
   resetPrivateRecipients,
