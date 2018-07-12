@@ -16,10 +16,7 @@ const input = Input({ style: inputStyle })
 
 // populate input with last message sent by me when i hit up
 input.on('up', () => {
-  const myMsgs = state.getMessages().filter(m => m.rawAuthor === state.getMe())
-  if (myMsgs[myMsgs.length - 1]) {
-    input.set(myMsgs[myMsgs.length - 1].rawText)
-  }
+  input.set(state.getLastInput())
 })
 
 // clear the input if i hit down or esc
@@ -42,6 +39,7 @@ input.on('keypress', (_, key) => {
 
 // post a message or fire a command when i hit enter
 input.on('enter', (line) => {
+  state.setLastInput(line)
   // handle /slash commands
   commander(line)
     .then((response) => {
@@ -73,7 +71,7 @@ input.on('ctrl-c', () => {
 // cycle through unread messages when i press control-u
 input.on('ctrl-u', () => {
   const unread = state.getLastNotification()
-  // if there are no unreads 
+  // if there are no unreads
   if (!unread.length) {
     state.setPublicMode()
     return

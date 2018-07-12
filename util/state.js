@@ -26,6 +26,7 @@ let notifications = []
 let currentMode = constants.MODE.PUBLIC
 let privateMessageRoot = null
 let systemMessage = null
+let lastInput = ''
 const authors = {}
 // #endregion
 
@@ -304,6 +305,11 @@ const markFilteredMessagesRead = () => {
   filteredMessages.forEach(msg => markAsRead(msg))
 }
 const isRead = (message) => storage.getItemSync(message.key)
+
+const getLastInput = () => lastInput
+const setLastInput = (input) => {
+  lastInput = input
+}
 // #endregion
 
 module.exports = {
@@ -346,5 +352,7 @@ module.exports = {
   getNotifications,
   getLastNotification,
   clearNotification,
-  resetNotifications
+  resetNotifications,
+  getLastInput,
+  setLastInput
 }
