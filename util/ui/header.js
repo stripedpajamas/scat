@@ -1,4 +1,4 @@
-const c = require('clorox')
+const tc = require('turbocolor')
 const state = require('../state')
 
 // header describing mode and potentially private recipients
@@ -14,8 +14,8 @@ const header = () => {
   const notification = state.getLastNotification() || []
   const notificationRecipients = notification ? notification.map(state.getAuthor).join(', ') : ''
   const rightHeaderText = notificationRecipients && `Private msg from: ${notificationRecipients}`
-  const leftHeader = isPrivate ? `${c.bgBlack.white(leftHeaderText)}` : `${c.bgWhite.black(leftHeaderText)}`
-  const rightHeader = `${c.bgYellow.black(rightHeaderText)}`
+  const leftHeader = isPrivate ? tc.bgBlack.white(leftHeaderText) : tc.bgWhite.black(leftHeaderText)
+  const rightHeader = tc.bgYellow.black(rightHeaderText)
   const spacerWidth = currentWidth - leftHeaderText.length - rightHeaderText.length
   const spacer = ' '.repeat(spacerWidth > 0 ? spacerWidth : 1)
   return `${leftHeader}${spacer}${rightHeader}`

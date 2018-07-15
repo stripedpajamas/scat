@@ -1,4 +1,4 @@
-const c = require('clorox')
+const tc = require('turbocolor')
 const Input = require('diffy/input')
 const state = require('../state')
 const commander = require('../commander')
@@ -10,7 +10,7 @@ const client = require('../client')
 let tabCompleter = null
 
 const inputStyle = (start, cursor, end) =>
-  `${start}${c.white.bold('|')}${cursor || ''}${end}`
+  `${start}${tc.white.bold('|')}${cursor || ''}${end}`
 
 const input = Input({ style: inputStyle })
 

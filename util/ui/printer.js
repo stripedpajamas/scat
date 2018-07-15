@@ -1,4 +1,4 @@
-const c = require('clorox')
+const tc = require('turbocolor')
 const format = require('date-fns/format')
 const render = require('./renderer')
 const state = require('../state')
@@ -12,7 +12,7 @@ const highlightMentions = (text) => {
     state.getMeNames().forEach((me) => {
       highlighted = highlighted.split(' ').map((word) => {
         if (word === me) {
-          return `${c.bgMagenta.black(word)}`
+          return tc.bgMagenta.black(word)
         }
         return word
       }).join(' ')
@@ -24,8 +24,8 @@ const highlightMentions = (text) => {
 const message = (m) => {
   const msg = m.value
   const fromMe = msg.author === state.getMe()
-  const authorText = () => c.bold[fromMe ? 'green' : color(msg.author)](state.getAuthor(msg.author))
-  const timeText = `${c.gray.dim(format(msg.timestamp, constants.TIME_FORMAT))}`
+  const authorText = () => tc.bold[fromMe ? 'green' : color(msg.author)](state.getAuthor(msg.author))
+  const timeText = tc.gray.dim(format(msg.timestamp, constants.TIME_FORMAT))
   const renderedMsg = render(msg.content.text)
 
   const currentWidth = state.getWidth()
@@ -52,9 +52,9 @@ const message = (m) => {
 const action = (m) => {
   const msg = m.value
   const fromMe = msg.author === state.getMe()
-  const authorText = () => c.bold[fromMe ? 'green' : color(msg.author)](state.getAuthor(msg.author))
-  const timeText = `${c.gray.dim(format(msg.timestamp, constants.TIME_FORMAT))}`
-  const renderedMsg = c.bold[fromMe ? 'green' : color(msg.author)](render(msg.content.text))
+  const authorText = () => tc.bold[fromMe ? 'green' : color(msg.author)](state.getAuthor(msg.author))
+  const timeText = tc.gray.dim(format(msg.timestamp, constants.TIME_FORMAT))
+  const renderedMsg = tc.bold[fromMe ? 'green' : color(msg.author)](render(msg.content.text))
 
   const currentWidth = state.getWidth()
 
@@ -76,9 +76,9 @@ const action = (m) => {
 
 const system = (msg) => {
   return state.pushSystemMessage({
-    text: () => `${`${c.bold.yellow(msg)}`}`,
+    text: () => tc.bold.yellow(msg),
     rawText: msg,
-    time: `${`${c.gray.dim(format(Date.now(), constants.TIME_FORMAT))}`}`,
+    time: tc.gray.dim(format(Date.now(), constants.TIME_FORMAT)),
     rawTime: Date.now()
   })
 }
@@ -86,9 +86,9 @@ const system = (msg) => {
 const error = (error) => {
   const msg = error.message
   return state.pushSystemMessage({
-    text: () => `${`${c.bold.bgRed.white(msg)}`}`,
+    text: () => tc.bold.bgRed.white(msg),
     rawText: msg,
-    time: `${`${c.gray.dim(format(Date.now(), constants.TIME_FORMAT))}`}`,
+    time: tc.gray.dim(format(Date.now(), constants.TIME_FORMAT)),
     rawTime: Date.now()
   })
 }
