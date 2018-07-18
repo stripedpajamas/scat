@@ -3,33 +3,31 @@ const tc = require('turbocolor')
 
 const stylize = (m) => {
   let rendered = m
-  // regex's for finding input with stylized declaring symbols
-  const boldRegEx = /\*[^*]+\*/g
+  // regex's for finding input with style indicating symbols
+  const boldRegEx = /\*{2}[^*]+\*{2}/g
   const underlineRegEx = /__[^_]+__/g
   const italicRegEx = /_[^_]+_/g
 
-  // matches for stylized input
-  const boldMatches = rendered.match(boldRegEx)
+  // matching for style indicating input. if there are matches then we
+  // are replacing the match with the stylized version, removing symbols
   const underlineMatches = rendered.match(underlineRegEx)
-  const italicMatches = rendered.match(italicRegEx)
-
-  // checking if there are matches. if there are then we are
-  // replacing the match with the stylized version, removing symbols
-  if (boldMatches) {
-    boldMatches.forEach((match) => {
-      rendered = rendered.replace(match, tc.bold(match.replace(/\*/g, '')))
-    })
-  }
-
   if (underlineMatches) {
     underlineMatches.forEach((match) => {
       rendered = rendered.replace(match, tc.underline(match.replace(/_/g, '')))
     })
   }
 
+  const italicMatches = rendered.match(italicRegEx)
   if (italicMatches) {
     italicMatches.forEach((match) => {
       rendered = rendered.replace(match, tc.italic(match.replace(/_/g, '')))
+    })
+  }
+
+  const boldMatches = rendered.match(boldRegEx)
+  if (boldMatches) {
+    boldMatches.forEach((match) => {
+      rendered = rendered.replace(match, tc.bold(match.replace(/\*/g, '')))
     })
   }
 
