@@ -1,12 +1,13 @@
 const emoji = require('node-emoji')
 const tc = require('turbocolor')
 
+// regex's for finding input with style indicating symbols
+const boldRegEx = /\*[^*]+\*/g
+const underlineRegEx = /__[^_]+__/g
+const italicRegEx = /_[^_]+_/g
+
 const stylize = (m) => {
   let rendered = m
-  // regex's for finding input with style indicating symbols
-  const boldRegEx = /\*[^*]+\*/g
-  const underlineRegEx = /__[^_]+__/g
-  const italicRegEx = /_[^_]+_/g
 
   // matching for style indicating input. if there are matches then we
   // are replacing the match with the stylized version, removing symbols
@@ -39,10 +40,10 @@ const render = (m) => {
   let rendered = m
 
   if (typeof m === 'string') {
-    // check for any text stylizing
-    rendered = stylize(rendered)
     // rendering emojis into messages
     rendered = emoji.emojify(rendered, null, e => `${e} `)
+    // check for any text stylizing
+    rendered = stylize(rendered)
   }
 
   return rendered

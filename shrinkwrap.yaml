@@ -1,5 +1,4 @@
 dependencies:
-  clorox: 1.0.3
   clp: 4.0.10
   date-fns: 1.29.0
   diffy: 2.0.0
@@ -24,6 +23,7 @@ dependencies:
   ssb-ref: 2.11.1
   ssb-search: 1.1.2
   ssb-ws: 2.1.1
+  turbocolor: 2.3.0
   update-notifier: 2.5.0
 devDependencies:
   standard: 11.0.1
@@ -518,10 +518,6 @@ packages:
     dev: true
     resolution:
       integrity: sha1-/xnt6Kml5XkyQUewwR8PvLq+1jk=
-  /clorox/1.0.3:
-    dev: false
-    resolution:
-      integrity: sha512-w3gKAUKMJYmmaJyc+p+iDrDtLvsFasrx/y6/zWo2U1TZfsz3y4Vl4T9PHCZrOwk1eMTOSRI6xHdpDR4PhTdy8Q==
   /clp/4.0.10:
     dependencies:
       is-number: 2.1.0
@@ -4228,6 +4224,10 @@ packages:
     dev: false
     resolution:
       integrity: sha1-J6XeoGs2sEoKmWZ3SykIaPD8QP0=
+  /turbocolor/2.3.0:
+    dev: false
+    resolution:
+      integrity: sha512-Mwf2cXwT8UFj7G97BOhVD7m7kKZhsGdEG8I/FqBz8nA4SskkPLdX1RcQ2rKbfCzGiF9xCaULXd3XcKaWUpbehQ==
   /tweetnacl-auth/0.3.1:
     dependencies:
       tweetnacl: 0.14.5
@@ -4506,7 +4506,6 @@ registry: 'https://registry.npmjs.org/'
 shrinkwrapMinorVersion: 8
 shrinkwrapVersion: 3
 specifiers:
-  clorox: ^1.0.3
   clp: ^4.0.10
   date-fns: ^1.29.0
   diffy: ^2.0.0
@@ -4532,4 +4531,5 @@ specifiers:
   ssb-search: ^1.1.2
   ssb-ws: ^2.1.1
   standard: ^11.0.1
+  turbocolor: ^2.2.0
   update-notifier: ^2.5.0
