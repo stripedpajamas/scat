@@ -4,7 +4,7 @@ const tc = require('turbocolor')
 const stylize = (m) => {
   let rendered = m
   // regex's for finding input with style indicating symbols
-  const boldRegEx = /\*{2}[^*]+\*{2}/g
+  const boldRegEx = /\*[^*]+\*/g
   const underlineRegEx = /__[^_]+__/g
   const italicRegEx = /_[^_]+_/g
 
