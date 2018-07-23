@@ -1,11 +1,10 @@
 const tc = require('turbocolor')
 const Input = require('diffy/input')
+const core = require('ssb-chat-core')
 const state = require('../state')
 const commander = require('../commander')
-const messenger = require('../messenger')
 const tabComplete = require('../tabComplete')
 const printer = require('./printer')
-const client = require('../client')
 
 let tabCompleter = null
 
@@ -43,11 +42,11 @@ input.on('enter', (line) => {
   // handle /slash commands
   commander(line)
     .then((response) => {
-      if (response.print) {
-        printer.system(response.print)
+      if (response.result) {
+        printer.system(response.result)
       } else if (!response.command) {
         // default to post a message
-        messenger.sendMessage(line).catch(printer.error)
+        core.messenger.sendMessage(line).catch(printer.error)
       }
     })
     .catch(printer.error)
@@ -64,31 +63,32 @@ input.on('tab', () => {
 // exit gracefully when i hit control-c
 input.on('ctrl-c', () => {
   console.log('\n\nGoodbye\n')
-  client.stop()
+  core.stop()
   process.exit(0)
 })
 
 // cycle through unread messages when i press control-u
 input.on('ctrl-u', () => {
-  const unread = state.getLastNotification()
+  const unread = core.unreads.getLast()
   // if there are no unreads
-  if (!unread.length) {
-    state.setPublicMode()
+  if (!unread) {
+    core.mode.setPublic()
     return
   }
 
   // if there are unreads, we want to go to private mode with those recipients
-  state.setPrivateRecipients(unread)
+  core.recipients.set(unread)
 })
 
 input.on('ctrl-t', () => {
-  if (state.isPrivateMode()) {
-    state.setPublicMode()
+  if (core.mode.isPrivate()) {
+    core.mode.setPublic()
     return
   }
 
-  if (state.getLastPrivateRecipient().length) {
-    state.setPrivateRecipients(state.getLastPrivateRecipient())
+  const lastPrivate = core.recipients.getLast()
+  if (lastPrivate && lastPrivate.size) {
+    core.recipients.set(core.recipients.getLast())
   }
 })
 

@@ -1,8 +1,5 @@
-const ref = require('ssb-ref')
-const Constants = require('./constants')
-const state = require('./state')
-const modules = require('../modules')
-const messenger = require('./messenger')
+const constants = require('./constants')
+const core = require('ssb-chat-core')
 const printer = require('./ui/printer')
 
 module.exports = (input) => new Promise((resolve, reject) => {
@@ -10,134 +7,124 @@ module.exports = (input) => new Promise((resolve, reject) => {
   const command = line[0]
 
   switch (command) {
-    // /clear to clear notifications
-    case '/clear': {
-      state.resetNotifications()
-      return resolve({ command: true, print: 'Notifications reset' })
+    case '/state': {
+      return core.commands.state(line[1])
+        .then(({ result }) => console.log(result))
+        .catch(reject)
     }
     // /follow id
     case '/follow': {
       if (line.length < 2) {
-        return resolve({ command: true, print: Constants.HELP.follow })
+        return resolve({ command: true, result: constants.HELP.follow })
       }
-
-      return modules.follow(line[1], true)
-        .then(() => resolve({ command: true, print: `Followed ${line[1]}` }))
-        .catch(() => reject(new Error(`Could not follow ${line[1]}`)))
+      return core.commands.follow(line[1])
+        .then(resolve)
+        .catch(reject)
     }
     // /help show usage information
     case '/help': {
       // if no argument passed in, send help summary
       if (line.length < 2) {
-        return resolve({ command: true, print: Constants.HELP.SUMMARY })
+        return resolve({ command: true, result: constants.HELP.SUMMARY })
       }
 
-      return resolve({ command: true, print: Constants.HELP[line[1]] || Constants.HELP.NOT_FOUND })
+      return resolve({ command: true, result: constants.HELP[line[1]] || constants.HELP.NOT_FOUND })
     }
     // /identify id name
     case '/identify': {
       if (line.length < 3) {
-        return resolve({ command: true, print: Constants.HELP.identify })
+        return resolve({ command: true, result: constants.HELP.identify })
       }
 
-      return modules.about(line[2], line[1])
-        .then(() => resolve({ command: true, print: Constants.COMMAND_TEXT.NAME.SUCCESS }))
-        .catch(() => reject(new Error(Constants.COMMAND_TEXT.NAME.FAILURE)))
+      return core.commands.identify(line[1], line[2])
+        .then(resolve)
+        .catch(reject)
     }
     // /me status (action message in IRC land)
     case '/me': {
       const restOfLine = line.slice(1).join(' ')
-      // send message
-      messenger.sendAction(restOfLine).catch(printer.error)
-      return resolve({ command: true })
+      
+      return core.commands.me(restOfLine)
+        .then(resolve)
+        .catch(printer.error)
     }
     // /name name
     case '/nick':
     case '/name': {
       if (line.length < 2) {
-        return resolve({ command: true, print: Constants.HELP.name })
+        return resolve({ command: true, result: constants.HELP.name })
       }
 
-      return modules.about(line[1])
-        .then(() => resolve({ command: true, print: Constants.COMMAND_TEXT.NAME.SUCCESS }))
-        .catch(() => reject(new Error(Constants.COMMAND_TEXT.NAME.FAILURE)))
+      return core.commands.nick(line[1])
+        .then(resolve)
+        .catch(reject)
     }
-    // /notifications to get current unreads
-    case '/notifications': {
-      const notifications = state.getNotifications().map(recps => recps.map(state.getAuthor).join(', ')).join('; ')
-      const notificationText = `Unread messages from: ${notifications}`
-      return resolve({ command: true, print: notifications ? notificationText : 'No unread messages' })
+    // /unreads to get current unreads
+    case '/unreads': {
+      return core.commands.unreads()
+        .then(resolve)
+        .catch(reject)
     }
     // /private @recp
     case '/private': {
-      if (line.length < 2) {
-        return reject(new Error(Constants.COMMAND_TEXT.PRIVATE.NO_RECIPIENTS))
-      }
       const recipients = line.slice(1).join(' ').split(',').map(x => x.trim())
-      if (recipients.length > 6) {
-        return reject(new Error(Constants.COMMAND_TEXT.PRIVATE.TOO_MANY_RECIPIENTS))
-      }
-      const ids = recipients.map(r => state.getAuthorId(r))
-      if (!ids.every(id => ref.isFeedId(id))) {
-        return reject(new Error(Constants.COMMAND_TEXT.PRIVATE.INVALID_FEED_IDS))
-      }
-      state.setPrivateRecipients(ids)
-      return resolve({ command: true })
+      return core.commands.private(recipients)
+        .then(resolve)
+        .catch(reject)
     }
     // /pub invite-code
     case '/pub': {
       if (line.length < 2) {
-        return resolve({ command: true, print: Constants.HELP.pub })
+        return resolve({ command: true, result: constants.HELP.pub })
       }
 
-      // attempt to join with the supplied invite code
-      return modules.invite(line[1])
-        .then(() => resolve({ command: true, print: Constants.COMMAND_TEXT.PUB.SUCCESS }))
-        .catch(() => reject(new Error(Constants.COMMAND_TEXT.PUB.FAILURE)))
+      return core.commands.pub(line[1])
+        .then(resolve)
+        .catch(reject)
     }
     // /quit leaves private mode if in it
     case '/q':
     case '/quit': {
-      if (!state.isPrivateMode()) {
-        return resolve({ command: true, print: Constants.COMMAND_TEXT.QUIT.FROM_PUBLIC })
-      }
-      state.setPublicMode()
-      return resolve({ command: true })
+      core.commands.quit()
+        .then(resolve)
+        .catch(reject)
     }
     // /say something to say something without command-processing it
     case '/say': {
       const restOfLine = line.slice(1).join(' ')
-      // send message
-      messenger.sendMessage(restOfLine).catch(printer.error)
-      return resolve({ command: true })
+      return core.commands.say(restOfLine)
+        .then(resolve)
+        .catch(reject)
     }
     // /unfollow id
     case '/unfollow': {
       if (line.length < 2) {
-        return resolve({ command: true, print: Constants.HELP.unfollow })
+        return resolve({ command: true, result: constants.HELP.unfollow })
       }
 
-      return modules.follow(line[1], false)
-        .then(() => resolve({ command: true, print: `Unfollowed ${line[1]}` }))
-        .catch(() => reject(new Error(`Could not unfollow ${line[1]}`)))
+      return core.commands.unfollow(line[1])
+        .then(resolve)
+        .catch(reject)
     }
     // /whoami returns my own id
     case '/whoami': {
-      return modules.whoami()
-        .then((id) => resolve({ command: true, print: id }))
-        .catch(() => reject(new Error(Constants.COMMAND_TEXT.WHOAMI.FAILURE)))
+      return core.commands.whoami()
+        .then(resolve)
+        .catch(reject)
     }
     // /whois returns the id of an already-identified individual
     case '/whois': {
       if (line.length < 2) {
-        return resolve({ command: true, print: Constants.HELP.whois })
+        return resolve({ command: true, result: constants.HELP.whois })
       }
-      return resolve({ command: true, print: state.getAuthorId(line[1]) })
+      return core.commands.whois(line[1])
+        .then(resolve)
+        .catch(reject)
     }
 
     default: {
       if (command[0] === '/') {
-        return resolve({ command: false, print: Constants.COMMAND_TEXT.INVALID })
+        return resolve({ command: false, result: constants.HELP.COMMAND_NOT_FOUND })
       }
       return resolve({})
     }

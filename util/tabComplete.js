@@ -1,18 +1,15 @@
 const emojis = require('node-emoji')
-const state = require('./state')
+const core = require('ssb-chat-core')
 const constants = require('./constants')
 
 const emojiList = Object.keys(emojis.emoji).map(e => `:${e}:`)
 
-const author = (partial) => {
-  const authors = state.getAuthors()
-  const names = Object.values(authors).map(obj => obj.name)
-  return names.filter(name => name.startsWith(partial))
-}
+const author = (partial) => core.authors.get()
+    .map(nameMap => nameMap.get('name'))
+    .filter(name => name.startsWith(partial))
+    .toArray()
 
-const command = (partial) => {
-  return constants.COMMANDS.filter(cmd => cmd.startsWith(partial))
-}
+const command = (partial) => constants.COMMANDS.filter(cmd => cmd.startsWith(partial))
 
 const emoji = (partial) => {
   const possibleDups = {}
@@ -20,13 +17,11 @@ const emoji = (partial) => {
   // we want to show these as options first
   const startEmojis = emojiList.filter(em => em.startsWith(partial))
   // adding them to the duplicates object
-  startEmojis.forEach((e) => {
-    possibleDups[e] = true
-  })
+  startEmojis.forEach((e) => { possibleDups[e] = true })
 
   // finding emojis that contain the partial
   // removing emojis that start with the partial so there aren't duplicates
-  const partialEmojis = emojiList.filter(em => em.includes(partial.slice(1))).filter(em => !possibleDups[em])
+  const partialEmojis = emojiList.filter(em => em.includes(partial.slice(1)) && !possibleDups[em])
   // returning the emojis that start with the partial and then the emojis that contain the partial
   return startEmojis.concat(partialEmojis)
 }

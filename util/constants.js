@@ -10,12 +10,11 @@ module.exports = {
   PROGRAM_DIR: '.scat',
   TIME_WINDOW: 7 * 24 * 60 * 60 * 1000,
   COMMANDS: [
-    '/clear',
     '/follow',
     '/help',
     '/identify',
     '/name',
-    '/notifications',
+    '/unreads',
     '/private',
     '/pub',
     '/quit',
@@ -24,29 +23,8 @@ module.exports = {
     '/whoami',
     '/whois'
   ],
-  COMMAND_TEXT: {
-    INVALID: 'Invalid command. Type / and tab to cycle through options or type /help for a list.',
-    QUIT: {
-      FROM_PUBLIC: '/quit leaves private mode. To exit the program press Control-C'
-    },
-    PUB: {
-      SUCCESS: 'Pub joined successfully',
-      FAILURE: 'Could not join pub'
-    },
-    NAME: {
-      SUCCESS: 'Name set successfully',
-      FAILURE: 'Could not set name'
-    },
-    WHOAMI: {
-      FAILURE: 'Could not figure out who you are'
-    },
-    PRIVATE: {
-      NO_RECIPIENTS: 'You must specify recipients: /private @recipient1, @recipient2, ...',
-      TOO_MANY_RECIPIENTS: 'You can only send a private message to up to 7 recipients',
-      INVALID_FEED_IDS: 'Could not determine feed ids for all recipients'
-    }
-  },
   HELP: {
+    COMMAND_NOT_FOUND: 'Invalid command. Type / and tab to cycle through options or type /help for a list.',
     SUMMARY: 'Available commands: /clear, /follow, /help, /identify, /name, /notifications, /private, /pub, /quit, /unfollow, /whoami, /whois. Type /help <cmd> for more info.',
     NOT_FOUND: 'Help for command not found. Type /help for list of available commands.',
 
@@ -71,11 +49,8 @@ module.exports = {
     whoami: 'To look up your own id: /whoami',
     '/whoami': 'To look up your own id: /whoami',
 
-    notifications: 'To see unread notifications: /notifications',
-    '/notifications': 'To see unread notifications: /notifications',
-
-    clear: 'To reset unread notifications: /clear',
-    '/clear': 'To reset unread notifications: /clear',
+    unreads: 'To see unread messages: /unreads',
+    '/unreads': 'To see unread messages: /unreads',
 
     private: 'To enter private mode: /private @recipient1, @recipient2, ...',
     '/private': 'To enter private mode: /private @recipient1, @recipient2, ...',

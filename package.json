@@ -29,31 +29,12 @@
     "standard": "^11.0.1"
   },
   "dependencies": {
-    "turbocolor": "^2.2.0",
     "clp": "^4.0.10",
     "date-fns": "^1.29.0",
     "diffy": "^2.0.0",
     "node-emoji": "^1.8.1",
-    "node-persist": "^2.1.0",
-    "pull-stream": "^3.6.7",
-    "punycode": "^2.1.1",
-    "scuttlebot": "^11.3.3",
-    "ssb-about": "^0.1.2",
-    "ssb-backlinks": "^0.7.2",
-    "ssb-blobs": "^1.1.5",
-    "ssb-client": "^4.5.7",
-    "ssb-config": "^2.2.0",
-    "ssb-ebt": "^5.2.1",
-    "ssb-friends": "^2.4.0",
-    "ssb-keys": "^7.0.16",
-    "ssb-meme": "^1.0.4",
-    "ssb-names": "^3.1.2",
-    "ssb-ooo": "^1.0.9",
-    "ssb-private": "^0.2.1",
-    "ssb-query": "^2.1.0",
-    "ssb-ref": "^2.11.1",
-    "ssb-search": "^1.1.2",
-    "ssb-ws": "^2.1.1",
+    "ssb-chat-core": "^1.0.0",
+    "turbocolor": "^2.2.0",
     "update-notifier": "^2.5.0"
   }
 }
