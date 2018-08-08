@@ -37,11 +37,18 @@ module.exports = {
     identify: 'To identify someone else: /identify @id name',
     '/identify': 'To identify someone else: /identify @id name',
 
+    block: 'To block someone: /block @id',
+    '/block': 'To block someone: /block @id',
+
     follow: 'To follow someone: /follow @id',
     '/follow': 'To follow someone: /follow @id',
 
     unfollow: 'To unfollow someone: /unfollow @id',
     '/unfollow': 'To unfollow someone: /unfollow @id',
+
+    unblock: 'To unblock someone: /unblock @id',
+    '/unblock': 'To unblock someone: /unblock @id',
+
 
     whois: 'To look up someone\'s id: /whois name',
     '/whois': 'To look up someone\'s id: /whois name',

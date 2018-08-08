@@ -29,13 +29,13 @@ process.on('uncaughtException', (e) => {
 })
 
 // set up listener for mode changes so we can clear system/error msgs
-core.events.mode.onChange((mode) => {
+core.events.on('mode-changed', (mode) => {
   state.resetSystemMessage()
 })
 
 core.start({
   debug: !!args.debug,
-  timeWindow: (args.days || 0) * 24 * 60 * 60 * 1000
+  timeWindow: args.days ? args.days * 24 * 60 * 60 * 1000 : undefined
 }, (err) => {
   if (err) {
     console.log(err)

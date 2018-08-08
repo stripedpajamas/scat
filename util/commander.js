@@ -12,6 +12,16 @@ module.exports = (input) => new Promise((resolve, reject) => {
         .then(({ result }) => console.log(result))
         .catch(reject)
     }
+    // block id
+    case '/block': {
+      if (line.length < 2) {
+        return resolve({ command: true, result: constants.HELP.block })
+      }
+
+      return core.commands.block(line[1])
+        .then(resolve)
+        .catch(reject)
+    }
     // /follow id
     case '/follow': {
       if (line.length < 2) {
@@ -103,6 +113,16 @@ module.exports = (input) => new Promise((resolve, reject) => {
       }
 
       return core.commands.unfollow(line[1])
+        .then(resolve)
+        .catch(reject)
+    }
+    // /unblock id
+    case '/unblock': {
+      if (line.length < 2) {
+        return resolve({ command: true, result: constants.HELP.unblock })
+      }
+
+      return core.commands.unblock(line[1])
         .then(resolve)
         .catch(reject)
     }
