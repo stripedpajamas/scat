@@ -35,7 +35,12 @@ module.exports = (input) => new Promise((resolve, reject) => {
     case '/help': {
       // if no argument passed in, send help summary
       if (line.length < 2) {
-        return resolve({ command: true, result: constants.HELP.SUMMARY })
+        const helpSummary = [
+          constants.HELP.AVAILABLE_COMMANDS,
+          constants.COMMANDS.join(', '),
+          constants.HELP.MORE_INFO
+        ].join(' ')
+        return resolve({ command: true, result: helpSummary })
       }
 
       return resolve({ command: true, result: constants.HELP[line[1]] || constants.HELP.NOT_FOUND })

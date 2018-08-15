@@ -25,7 +25,8 @@ module.exports = {
   ],
   HELP: {
     COMMAND_NOT_FOUND: 'Invalid command. Type / and tab to cycle through options or type /help for a list.',
-    SUMMARY: 'Available commands: /clear, /follow, /help, /identify, /name, /notifications, /private, /pub, /quit, /unfollow, /whoami, /whois. Type /help <cmd> for more info.',
+    AVAILABLE_COMMANDS: 'Available commands:',
+    MORE_INFO: 'Type /help <cmd> for more info.',
     NOT_FOUND: 'Help for command not found. Type /help for list of available commands.',
 
     pub: 'To join a pub server: /pub <invite-code>',
