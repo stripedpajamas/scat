@@ -50,7 +50,6 @@ module.exports = {
     unblock: 'To unblock someone: /unblock @id',
     '/unblock': 'To unblock someone: /unblock @id',
 
-
     whois: 'To look up someone\'s id: /whois name',
     '/whois': 'To look up someone\'s id: /whois name',
 

@@ -69,7 +69,7 @@ const render = (m) => {
   if (m.get('action')) {
     renderedText = tc.bold[m.get('fromMe') ? 'green' : color(m.get('author'))](renderedText)
   }
-  
+
   const time = tc.gray.dim(formatTime(m.get('timestamp'), constants.TIME_FORMAT))
   const author = () => tc.bold[m.get('fromMe') ? 'green' : color(m.get('author'))](m.get('authorName')())
   const text = () => highlightMentions(renderedText)

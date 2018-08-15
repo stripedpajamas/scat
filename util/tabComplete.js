@@ -5,9 +5,9 @@ const constants = require('./constants')
 const emojiList = Object.keys(emojis.emoji).map(e => `:${e}:`)
 
 const author = (partial) => core.authors.get()
-    .map(nameMap => nameMap.get('name'))
-    .filter(name => name.startsWith(partial))
-    .toArray()
+  .map(nameMap => nameMap.get('name'))
+  .filter(name => name.startsWith(partial))
+  .toArray()
 
 const command = (partial) => constants.COMMANDS.filter(cmd => cmd.startsWith(partial))
 

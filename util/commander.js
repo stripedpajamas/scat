@@ -58,7 +58,7 @@ module.exports = (input) => new Promise((resolve, reject) => {
     // /me status (action message in IRC land)
     case '/me': {
       const restOfLine = line.slice(1).join(' ')
-      
+
       return core.commands.me(restOfLine)
         .then(resolve)
         .catch(printer.error)
@@ -100,7 +100,7 @@ module.exports = (input) => new Promise((resolve, reject) => {
     // /quit leaves private mode if in it
     case '/q':
     case '/quit': {
-      core.commands.quit()
+      return core.commands.quit()
         .then(resolve)
         .catch(reject)
     }

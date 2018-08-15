@@ -130,5 +130,5 @@ module.exports = {
   getSystemMessage,
   resetSystemMessage,
   getLastInput,
-  setLastInput,
+  setLastInput
 }
