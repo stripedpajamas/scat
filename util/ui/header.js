@@ -12,7 +12,7 @@ const header = () => {
   const atTop = scrolling.atTop
   const recipients = core.recipients.getNotMe()
   const leftHeaderText = `:: ${mode} MODE ${isPrivate ? `(${recipients.join(', ')}) ` : ''}:: ${isScrolling ? `(MESSAGE HISTORY${atTop ? ' - TOP' : ''})` : ''}`
-  const unread = core.unreads.getLast()
+  const unread = state.getLastUnread()
   const unreadRecps = unread ? unread.map(core.authors.getName).join(', ') : ''
   const rightHeaderText = unreadRecps && `Private msg from: ${unreadRecps}`
   const leftHeader = isPrivate ? tc.bgBlack.white(leftHeaderText) : tc.bgWhite.black(leftHeaderText)

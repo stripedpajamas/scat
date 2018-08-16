@@ -14,6 +14,7 @@ let input = ''
 let viewableMessages = []
 let systemMessage = null
 let lastInput = ''
+let trueUnreads = core.unreads.get().toJS()
 // #endregion
 
 // #region args actions
@@ -115,6 +116,28 @@ const setLastInput = (input) => {
 }
 // #endregion
 
+// #region unreads
+core.events.on('unreads-changed', (unreads) => {
+  const newUnreads = []
+  unreads.forEach((unread) => { // an unread is an array of IDs
+    // see if we're currently in private mode with these humyns
+    const currentRecipients = core.recipients.get()
+      .filter(r => r !== core.me.get())
+    const talkingToThem = core.recipients.compare(currentRecipients, unread)
+    const inPrivateMode = core.mode.isPrivate()
+    // if we aren't in private mode
+    // or we are in private mode but with other people
+    if (!inPrivateMode || !talkingToThem) {
+      newUnreads.push(unread)
+    }
+    return true
+  })
+  trueUnreads = newUnreads
+})
+const getUnreads = () => trueUnreads
+const getLastUnread = () => trueUnreads[trueUnreads.length - 1]
+// #endregion
+
 module.exports = {
   setArgs,
   getArgs,
@@ -130,5 +153,7 @@ module.exports = {
   getSystemMessage,
   resetSystemMessage,
   getLastInput,
-  setLastInput
+  setLastInput,
+  getUnreads,
+  getLastUnread
 }
