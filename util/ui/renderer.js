@@ -1,9 +1,19 @@
 const emoji = require('node-emoji')
-const tc = require('turbocolor')
 const formatTime = require('date-fns/format')
 const core = require('ssb-chat-core')
+const c = require('colorette')
 const constants = require('../constants')
 const color = require('./color')
+
+const {
+  underline,
+  italic,
+  bold,
+  bgMagenta,
+  black,
+  gray,
+  dim
+} = c
 
 // regex's for finding input with style indicating symbols
 const boldRegEx = /\*[^*]+\*/g
@@ -18,21 +28,21 @@ const stylize = (m) => {
   const underlineMatches = rendered.match(underlineRegEx)
   if (underlineMatches) {
     underlineMatches.forEach((match) => {
-      rendered = rendered.replace(match, tc.underline(match.replace(/_/g, '')))
+      rendered = rendered.replace(match, underline(match.replace(/_/g, '')))
     })
   }
 
   const italicMatches = rendered.match(italicRegEx)
   if (italicMatches) {
     italicMatches.forEach((match) => {
-      rendered = rendered.replace(match, tc.italic(match.replace(/_/g, '')))
+      rendered = rendered.replace(match, italic(match.replace(/_/g, '')))
     })
   }
 
   const boldMatches = rendered.match(boldRegEx)
   if (boldMatches) {
     boldMatches.forEach((match) => {
-      rendered = rendered.replace(match, tc.bold(match.replace(/\*/g, '')))
+      rendered = rendered.replace(match, bold(match.replace(/\*/g, '')))
     })
   }
 
@@ -46,7 +56,7 @@ const highlightMentions = (text) => {
     core.me.names().forEach((me) => {
       highlighted = highlighted.split(' ').map((word) => {
         if (word === me) {
-          return tc.bgMagenta.black(word)
+          return bgMagenta(black(word))
         }
         return word
       }).join(' ')
@@ -67,14 +77,14 @@ const render = (m) => {
   }
 
   if (m.get('action')) {
-    renderedText = tc.bold[m.get('fromMe') ? 'green' : color(m.get('author'))](renderedText)
+    renderedText = bold(c[m.get('fromMe') ? 'green' : color(m.get('author'))](renderedText))
   }
 
-  const time = tc.gray.dim(formatTime(m.get('timestamp'), constants.TIME_FORMAT))
-  const author = () => tc.bold[m.get('fromMe') ? 'green' : color(m.get('author'))](m.get('authorName')())
+  const time = gray(dim(formatTime(m.get('timestamp'), constants.TIME_FORMAT)))
+  const author = () => bold(c[m.get('fromMe') ? 'green' : color(m.get('author'))](m.get('authorName')()))
   const text = () => highlightMentions(renderedText)
 
-  return `${time}  ${author()} ${text()}`
+  return `${time} ${author()} ${text()}`
 }
 
 module.exports = render

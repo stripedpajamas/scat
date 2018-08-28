@@ -1,13 +1,15 @@
-const tc = require('turbocolor')
+const c = require('colorette')
 const format = require('date-fns/format')
 const state = require('../state')
 const constants = require('../constants')
 
+const { bold, yellow, gray, dim, bgRed, white } = c
+
 const system = (msg) => {
   return state.pushSystemMessage({
-    text: () => tc.bold.yellow(msg),
+    text: () => bold(yellow(msg)),
     rawText: msg,
-    time: tc.gray.dim(format(Date.now(), constants.TIME_FORMAT)),
+    time: gray(dim(format(Date.now(), constants.TIME_FORMAT))),
     rawTime: Date.now()
   })
 }
@@ -15,9 +17,9 @@ const system = (msg) => {
 const error = (error) => {
   const msg = error.message
   return state.pushSystemMessage({
-    text: () => tc.bold.bgRed.white(msg),
+    text: () => bold(bgRed(white(msg))),
     rawText: msg,
-    time: tc.gray.dim(format(Date.now(), constants.TIME_FORMAT)),
+    time: gray(dim(format(Date.now(), constants.TIME_FORMAT))),
     rawTime: Date.now()
   })
 }

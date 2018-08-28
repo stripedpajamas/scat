@@ -1,4 +1,4 @@
-const tc = require('turbocolor')
+const c = require('colorette')
 const Input = require('diffy/input')
 const core = require('ssb-chat-core')
 const state = require('../state')
@@ -6,10 +6,12 @@ const commander = require('../commander')
 const tabComplete = require('../tabComplete')
 const printer = require('./printer')
 
+const { white, bold } = c
+
 let tabCompleter = null
 
 const inputStyle = (start, cursor, end) =>
-  `${start}${tc.white.bold('|')}${cursor || ''}${end}`
+  `${start}${white(bold('|'))}${cursor || ''}${end}`
 
 const input = Input({ style: inputStyle })
 

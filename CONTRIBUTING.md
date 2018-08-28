@@ -24,7 +24,7 @@ npm start -- --debug
 ```
 
 if you're playing around, i recommend either sending private messages to yourself (e.g. `/private @your-name`) or spinning up a new test SSB identity.
-i usually do the former, but when i need to do the latter, i copy `~/.ssb` to `~/.ssb-good`, so launching scat (which launches sbot) creates a new `~/.ssb` folder/indentity.
+i usually do the former, but when i need to do the latter, i copy `~/.ssb` to `~/.ssb-good`, so launching scat (which launches sbot) creates a new `~/.ssb` folder/identity.
 
 ### pull requests
 if there isn't an existing issue for the problem/feature your PR is for, open one so it can get some discussion and you don't waste time. then link to it in your PR.

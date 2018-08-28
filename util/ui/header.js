@@ -1,6 +1,8 @@
-const tc = require('turbocolor')
+const c = require('colorette')
 const core = require('ssb-chat-core')
 const state = require('../state')
+
+const { bgBlack, white, bgWhite, black, bgYellow, } = c
 
 // header describing mode and potentially private recipients
 const header = () => {
@@ -15,8 +17,8 @@ const header = () => {
   const unread = state.getLastUnread()
   const unreadRecps = unread ? unread.map(core.authors.getName).join(', ') : ''
   const rightHeaderText = unreadRecps && `Private msg from: ${unreadRecps}`
-  const leftHeader = isPrivate ? tc.bgBlack.white(leftHeaderText) : tc.bgWhite.black(leftHeaderText)
-  const rightHeader = tc.bgYellow.black(rightHeaderText)
+  const leftHeader = isPrivate ? bgBlack(white(leftHeaderText)) : bgWhite(black(leftHeaderText))
+  const rightHeader = bgYellow(black(rightHeaderText))
   const spacerWidth = currentWidth - leftHeaderText.length - rightHeaderText.length
   const spacer = ' '.repeat(spacerWidth > 0 ? spacerWidth : 1)
   return `${leftHeader}${spacer}${rightHeader}`

@@ -130,6 +130,11 @@ core.events.on('unreads-changed', (unreads) => {
     if (!inPrivateMode || !talkingToThem) {
       newUnreads.push(unread)
     }
+    // on the other hand, if we are talking to them
+    // we should mark these as read in core
+    if (inPrivateMode && talkingToThem) {
+      core.unreads.setAsRead(currentRecipients)
+    }
     return true
   })
   trueUnreads = newUnreads
