@@ -8,7 +8,7 @@ const pkg = require('./package.json')
 
 const args = clp()
 // set emoji arg
-args.emoji = !(args.emoji === false),
+args.emoji = !(args.emoji === false)
 // put args into state
 state.setArgs(args)
 
