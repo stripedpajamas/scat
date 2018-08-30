@@ -1,6 +1,7 @@
 const emoji = require('node-emoji')
 const formatTime = require('date-fns/format')
 const core = require('ssb-chat-core')
+const state = require('../state')
 const c = require('colorette')
 const constants = require('../constants')
 const color = require('./color')
@@ -71,7 +72,10 @@ const render = (m) => {
 
   if (typeof renderedText === 'string') {
     // rendering emojis into messages
-    renderedText = emoji.emojify(renderedText, null, e => `${e} `)
+    const shouldPrintEmojis = state.getArgs().emoji
+    if (shouldPrintEmojis) {
+      renderedText = emoji.emojify(renderedText, null, e => `${e} `)
+    }
     // check for any text stylizing
     renderedText = stylize(renderedText)
   }
