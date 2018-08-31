@@ -2,7 +2,7 @@ const c = require('colorette')
 const core = require('ssb-chat-core')
 const state = require('../state')
 
-const { bgBlack, white, bgWhite, black, bgYellow, } = c
+const { bgBlack, white, bgWhite, black, bgYellow } = c
 
 // header describing mode and potentially private recipients
 const header = () => {
