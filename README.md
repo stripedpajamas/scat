@@ -35,6 +35,20 @@ by default scat pulls in 7 days of messages. if you want less or more, run scat 
 $ scat --days 30
 ```
 
+Emojis are supported by default, to disable run scat with `--no-emoji`:
+
+```
+# This will prevent :smiley: being displayed as 😊
+$ scat --no-emoji
+```
+
+NB: If running scat via `npm start` you will need to prefix any command line args with `--`.
+For example:
+```
+# Start scat from the git checkout with emoji disabled and a month of data
+$ npm start -- --no-emoji --days 30
+```
+
 ### commands
 **type `/help` for a list of commands. type `/help <cmd>` for more info on that command.**
 
@@ -76,9 +90,9 @@ $ scat --days 30
 use the `PageUp`/`PageDown` keys to scroll through previous messages. The status bar at the top will display `MESSAGE HISTORY` when scrolling. scat works in a 7 day window of data to keep things snappy.
 
 ### private messaging
-scat supports sending private messages. so as not to muddy up the view with public and private messages, scat has you switch contexts by typing `/private` and then the name(s) (comma separated) of the private recipient(s) you want to converse with. 
+scat supports sending private messages. so as not to muddy up the view with public and private messages, scat has you switch contexts by typing `/private` and then the name(s) (comma separated) of the private recipient(s) you want to converse with.
 
-example: 
+example:
 ```bash
 > /private @joel # I want to send and receive private messages with Joel now
 > hello # only visible to Joel
@@ -94,7 +108,7 @@ example:
 the ui makes all of this a lot more obvious than this readme :)
 
 ### what's happening
-scat uses a special message type `scat_message`. this means that if you're using something like [Patchwork](https://github.com/ssbc/patchwork), your feed won't be all gobbled up by chat messages. And scat won't be all gobbled up by your posts. 
+scat uses a special message type `scat_message`. this means that if you're using something like [Patchwork](https://github.com/ssbc/patchwork), your feed won't be all gobbled up by chat messages. And scat won't be all gobbled up by your posts.
 
 but since it's all the same protocol and all the same feeds, all the same people are there. scat looks for `about` messages to show a user's name instead of their id, but falls back to the id if necessary.
 
