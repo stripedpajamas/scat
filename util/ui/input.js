@@ -44,9 +44,7 @@ input.on('enter', (line) => {
   // handle /slash commands
   commander(line)
     .then((response) => {
-      if (response.result) {
-        printer.system(response.result)
-      } else if (!response.command) {
+      if (!response.command) {
         // default to post a message
         core.messenger.sendMessage(line).catch(printer.error)
       }

@@ -14,7 +14,7 @@ const prompter = () => (
     return trim(`
       ${header()}
       ${messages.map(render).join('\n')}
-      ${systemMessage ? `${systemMessage.time}  ${systemMessage.text()}` : ''}
+      ${systemMessage ? `${systemMessage.time} ${systemMessage.text()}` : ''}
       > ${input.line()}
     `)
   })
