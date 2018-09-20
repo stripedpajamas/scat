@@ -33,7 +33,7 @@
     "date-fns": "^1.29.0",
     "diffy": "^2.0.0",
     "node-emoji": "^1.8.1",
-    "ssb-chat-core": "^1.0.38",
+    "ssb-chat-core": "^1.0.43",
     "colorette": "^1.0.0",
     "update-notifier": "^2.5.0"
   }
