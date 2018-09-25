@@ -3,7 +3,7 @@ tiny chat-like cli built on scuttlebutt
 
 ![screenshot](images/screenshot.png)
 
-_Checkout [Gester](https://github.com/stripedpajamas/gester) if you are looking for another scuttlebutt chat application with the same functionality, but with a GUI :hamster:_
+_Checkout [Gester](https://github.com/stripedpajamas/gester) if you're looking for another scuttlebutt chat application with the same functionality, but with a GUI :hamster:_
 
 more on scuttlebutt: https://www.scuttlebutt.nz/
 
