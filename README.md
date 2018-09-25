@@ -3,6 +3,7 @@ tiny chat-like cli built on scuttlebutt
 
 ![screenshot](images/screenshot.png)
 
+_if you are looking for another scuttlebutt chat application with the same functionality, but with a GUI, checkout [gester](https://github.com/stripedpajamas/gester)_
 
 more on scuttlebutt: https://www.scuttlebutt.nz/
 
