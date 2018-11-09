@@ -1,6 +1,10 @@
 # :mouse: scat :mouse:
 tiny chat-like cli built on scuttlebutt
 
+
+![npm](https://img.shields.io/npm/v/ssb-chat.svg) ![NpmLicense](https://img.shields.io/npm/l/ssb-chat.svg) ![npm](https://img.shields.io/npm/dt/ssb-chat.svg)
+
+
 ![screenshot](images/screenshot.png)
 
 _Checkout [Gester](https://github.com/stripedpajamas/gester) if you're looking for another scuttlebutt chat app with the same functionality, but with a GUI :hamster:_
