@@ -4,7 +4,7 @@ dependencies:
   date-fns: 1.29.0
   diffy: 2.0.0
   node-emoji: 1.8.1
-  ssb-chat-core: 1.0.48
+  ssb-chat-core: 1.0.50
   update-notifier: 2.5.0
 devDependencies:
   standard: 12.0.1
@@ -65,7 +65,7 @@ packages:
     dev: true
     resolution:
       integrity: sha512-7q7gtRQDJSyuEHjuVgHoUa2VuemFiCMrfQc9Tc08XTAc4Zj/5U1buQJ0HU6i7fKjXU09SVgSmxa4sLvuvS8Iyg==
-  /aligned-block-file/1.1.3:
+  /aligned-block-file/1.1.4:
     dependencies:
       hashlru: 2.2.1
       int53: 0.2.4
@@ -74,7 +74,7 @@ packages:
       uint48be: 1.0.2
     dev: false
     resolution:
-      integrity: sha512-ai/S+nZ9XMjC0ReZfq94OLGCICVBJyhNiKWmF1J+/GVZZaXtYV805plMi9obaWjfNl/QljB+VOsT+wQ7R858xA==
+      integrity: sha512-KE27h781ueGONLqSBY2ik6LJRr9vo0L/i3GGhtQgJfCk0MO2QNSgrXZVCk2t7UeZKYTxcTfl+yBgcZWqBiAGPQ==
   /ansi-align/2.0.0:
     dependencies:
       string-width: 2.1.1
@@ -193,11 +193,13 @@ packages:
   /array-union/1.0.2:
     dependencies:
       array-uniq: 1.0.3
+    dev: false
     engines:
       node: '>=0.10.0'
     resolution:
       integrity: sha1-mjRBDk9OPaI96jdb5b5w8kd47Dk=
   /array-uniq/1.0.3:
+    dev: false
     engines:
       node: '>=0.10.0'
     resolution:
@@ -529,7 +531,7 @@ packages:
       sodium-chloride: 1.1.2
     dev: false
     optionalDependencies:
-      sodium-native: 2.2.2
+      sodium-native: 2.2.3
     resolution:
       integrity: sha512-CbU1ISGiB2JBV6PDXx7hkl8D94d2TPD1BANUMFbr8rZYKJi8De2d3Hu2XDIOLAhXf+8yhoFOdjtLG6fxz3QByQ==
   /chokidar/1.7.0:
@@ -555,6 +557,11 @@ packages:
     dev: false
     resolution:
       integrity: sha512-vsGdkwSCDpWmP80ncATX7iea5DWQemg1UgCW5J8tqjU3lYw4FBYuj89J0CTVomA7BEfvSZd84GmHko+MxFQU2A==
+  /circular-json/0.3.3:
+    deprecated: 'CircularJSON is in maintenance only, flatted is its successor.'
+    dev: true
+    resolution:
+      integrity: sha512-UZK3NBx2Mca+b5LsG7bY183pHWt5Y1xts4P3Pz7ENTwGVnJOUWbRb3ocjvX7hx9tq/yTAdclXm9sZ38gNuem4A==
   /class-utils/0.3.6:
     dependencies:
       arr-union: 3.1.0
@@ -647,7 +654,7 @@ packages:
       integrity: sha512-6tvAOO+D6OENvRAh524Dh9jcfKTYDQAqvqezbCW82xj5X0pSrcpxtvRKHLG0yBY6SD7PSDrJaj+0AiOcKVd1Xg==
   /compare-at-paths/1.0.0:
     dependencies:
-      libnested: 1.3.2
+      libnested: 1.4.0
       tape: 4.9.1
       typewiselite: 1.0.0
     dev: false
@@ -798,6 +805,12 @@ packages:
     dev: true
     resolution:
       integrity: sha512-mel+jf7nrtEl5Pn1Qx46zARXKDpBbvzezse7p7LqINmdoIk8PYP5SySaxEmYv6TZ0JyEKA1hsCId6DIhgITtWQ==
+  /debug/4.1.0:
+    dependencies:
+      ms: 2.1.1
+    dev: false
+    resolution:
+      integrity: sha512-heNPJUJIqC+xB6ayLAMHaIrmN9HKa7aQO8MGqKpvCA+uJYVcvR6l5kgdrhRuwPFHU7P5/A1w0BjByPHwpfTDKg==
   /decode-uri-component/0.2.0:
     dev: false
     engines:
@@ -896,19 +909,6 @@ packages:
     dev: true
     resolution:
       integrity: sha512-2kjwuGGonL7gWE1XU4Fv79+vVzpoQCl0V+boMwWtOQJV2AGDabCwez++nB1Nli/8BabAfZQ/UuHPlp6AymKdWw==
-  /del/3.0.0:
-    dependencies:
-      globby: 6.1.0
-      is-path-cwd: 1.0.0
-      is-path-in-cwd: 1.0.1
-      p-map: 1.2.0
-      pify: 3.0.0
-      rimraf: 2.6.2
-    dev: true
-    engines:
-      node: '>=4'
-    resolution:
-      integrity: sha1-U+z2mf/LyzljdpGrE7rxYIGXZuU=
   /delegates/1.0.0:
     dev: false
     resolution:
@@ -1232,7 +1232,7 @@ packages:
       file-entry-cache: 2.0.0
       functional-red-black-tree: 1.0.1
       glob: 7.1.3
-      globals: 11.8.0
+      globals: 11.9.0
       ignore: 4.0.6
       imurmurhash: 0.1.4
       inquirer: 5.2.0
@@ -1448,7 +1448,7 @@ packages:
       integrity: sha1-OrGi0qYsi/tDGgyUy3l6L84nyWI=
   /file-entry-cache/2.0.0:
     dependencies:
-      flat-cache: 1.3.1
+      flat-cache: 1.3.4
       object-assign: 4.1.1
     dev: true
     engines:
@@ -1505,21 +1505,17 @@ packages:
       node: '>=4'
     resolution:
       integrity: sha1-RdG35QbHF93UgndaK3eSCjwMV6c=
-  /flat-cache/1.3.1:
+  /flat-cache/1.3.4:
     dependencies:
-      del: 3.0.0
-      flatted: 2.0.0
+      circular-json: 0.3.3
       graceful-fs: 4.1.15
+      rimraf: 2.6.2
       write: 0.2.1
     dev: true
     engines:
       node: '>=0.10.0'
     resolution:
-      integrity: sha512-BUaXPScuox3BPmS9CGqbsh7tvAGzBEU2Dlnw243WoHjC0vO57faTOvHOkPQkPZZdpvJuwOQhMdAQx3BtdUh6nQ==
-  /flatted/2.0.0:
-    dev: true
-    resolution:
-      integrity: sha512-R+H8IZclI8AAkSBRQJLVOsxwAoHd6WC40b4QTNWIjzAa6BXOBfQcM587MXDTVPeYaopFNWHUFLx7eNmHDSxMWg==
+      integrity: sha512-VwyB3Lkgacfik2vhqR4uv2rvebqmDvFu4jlN/C1RzWoJEo8I7z4Q404oiqYCkq41mni8EzQnm95emU9seckwtg==
   /flumecodec/0.0.0:
     dependencies:
       level-codec: 6.2.0
@@ -1545,7 +1541,7 @@ packages:
       integrity: sha512-mT0v0dY9EkWRGwDtTfavYNv2Z6nrMNlVZCNJD7qxjfPJymfv8kNYB4UvDdBHleHegvzjufjnE73IkRG5DgMjww==
   /flumelog-offset/3.3.2:
     dependencies:
-      aligned-block-file: 1.1.3
+      aligned-block-file: 1.1.4
       append-batch: 0.0.1
       explain-error: 1.0.4
       hashlru: 2.2.1
@@ -1760,12 +1756,12 @@ packages:
       node: '>=4'
     resolution:
       integrity: sha1-sxnA3UYH81PzvpzKTHL8FIxJ9EU=
-  /globals/11.8.0:
+  /globals/11.9.0:
     dev: true
     engines:
       node: '>=4'
     resolution:
-      integrity: sha512-io6LkyPVuzCHBSQV9fmOwxZkUk6nIaGmxheLDgmuFv89j0fm2aqDbIXKAGfzCMHqz3HLF2Zf8WSG6VqMh2qFmA==
+      integrity: sha512-5cJVtyXWH8PiJPVLZzzoIizXx944O4OmRro5MWKx5fT4MgcN7OfaMutPeaTdJCCURwbWdhhcCWcKIffPnmTzBg==
   /globby/4.1.0:
     dependencies:
       array-union: 1.0.2
@@ -1779,18 +1775,6 @@ packages:
       node: '>=0.10.0'
     resolution:
       integrity: sha1-CA9UVJ7BuCpsYOYx/ILhIR2+lfg=
-  /globby/6.1.0:
-    dependencies:
-      array-union: 1.0.2
-      glob: 7.1.3
-      object-assign: 4.1.1
-      pify: 2.3.0
-      pinkie-promise: 2.0.1
-    dev: true
-    engines:
-      node: '>=0.10.0'
-    resolution:
-      integrity: sha1-9abXDoOV4hyFj7BInWTfAkJNUGw=
   /gossip-query/0.2.3:
     dependencies:
       obv: 0.0.1
@@ -2230,23 +2214,10 @@ packages:
       node: '>=0.10.0'
     resolution:
       integrity: sha1-PkcprB9f3gJc19g6iW2rn09n2w8=
-  /is-path-cwd/1.0.0:
-    dev: true
-    engines:
-      node: '>=0.10.0'
-    resolution:
-      integrity: sha1-0iXsIxMuie3Tj9p2dHLmLmXxEG0=
-  /is-path-in-cwd/1.0.1:
-    dependencies:
-      is-path-inside: 1.0.1
-    dev: true
-    engines:
-      node: '>=0.10.0'
-    resolution:
-      integrity: sha512-FjV1RTW48E7CWM7eE/J2NJvAEEVektecDBVBE5Hh3nM1Jd0kvhHtX68Pr3xsDf857xt3Y4AkwVULK1Vku62aaQ==
   /is-path-inside/1.0.1:
     dependencies:
       path-is-inside: 1.0.2
+    dev: false
     engines:
       node: '>=0.10.0'
     resolution:
@@ -2636,10 +2607,10 @@ packages:
       node: '>= 0.8.0'
     resolution:
       integrity: sha1-OwmSTt+fCDwEkP3UwLxEIeBHZO4=
-  /libnested/1.3.2:
+  /libnested/1.4.0:
     dev: false
     resolution:
-      integrity: sha512-YvMQglpk/DyB8vFL5usJe6IZTqOU/fRopoUpoOt9TavYh5CaGdTp6zYqrA7DW8tHmZAr8fj+pDXbHBwlVrcVXQ==
+      integrity: sha512-txW/cdkfe0eYhIfLbZl8pfkMu2NWEVWAuDAaiDawahx1hqTaDVoFbjISdWgU24XUI/10kBjJYDsisoPSMJKnpw==
   /libsodium-wrappers/0.7.3:
     dependencies:
       libsodium: 0.7.3
@@ -2915,7 +2886,6 @@ packages:
     resolution:
       integrity: sha1-VgiurfwAvmwpAd9fmGF4jeDVl8g=
   /ms/2.1.1:
-    dev: true
     resolution:
       integrity: sha512-tgp+dl5cGk28utYktBsrFqA7HKgrhgPsg6Z/EfhWI4gl1Hwq8B/GmY/0oXZ6nF8hDVesS/FpnYaD/kOWhYQvyg==
   /multiblob-http/0.4.2:
@@ -3025,7 +2995,7 @@ packages:
     dependencies:
       nanoassert: 1.1.0
       nanotiming: 7.3.1
-      remove-array-items: 1.0.0
+      remove-array-items: 1.1.0
     dev: false
     resolution:
       integrity: sha512-6UlqagLV9/ADqcTU60mipAPEd16WDbO+a9WeeGVn9RucHKNDTcPt9MOf8ZmAvbA3V2CV+EJS28eupNalg4YF8Q==
@@ -3345,12 +3315,6 @@ packages:
       node: '>=4'
     resolution:
       integrity: sha1-IKAQOyIqcMj9OcwuWAaA893l7EM=
-  /p-map/1.2.0:
-    dev: true
-    engines:
-      node: '>=4'
-    resolution:
-      integrity: sha512-r6zKACMNhjPJMTl8KcFH4li//gkrXWfbD6feV8l6doRHlzljFWGJ2AP6iKaCJXyZmAUMOPtvbW7EXkbWO/pLEA==
   /p-try/1.0.0:
     dev: true
     engines:
@@ -4071,10 +4035,10 @@ packages:
     hasBin: true
     resolution:
       integrity: sha1-gCo4w6qYyeHj6gFe66IR0ny2Xh8=
-  /remove-array-items/1.0.0:
+  /remove-array-items/1.1.0:
     dev: false
     resolution:
-      integrity: sha1-B79CyzMvTPboXq2DteToltIyayE=
+      integrity: sha512-+YAHWd5patqAM/F4uBsto9h8RXDVxPRrKW46AkbI6eH12OFrN9wlGpkNWYxCjCfwtkidTjaaCXqU634V4mysvw==
   /remove-trailing-separator/1.1.0:
     dev: false
     resolution:
@@ -4318,6 +4282,7 @@ packages:
       ssb-ref: 2.13.6
       ssb-validate: 4.0.3
       typewiselite: 1.0.0
+    deprecated: 'WARNING: This project has been renamed to ssb-db. Install using ssb-db instead.'
     dev: false
     resolution:
       integrity: sha512-gKQ8tJVnxd8WJEMusXyVkcHGZHoYB+F+TuQYisFYlhAntqlKBExdN+IT6DjVmHev7DvxE68PVtR8Ijqme93d2w==
@@ -4495,7 +4460,7 @@ packages:
     dev: false
     resolution:
       integrity: sha512-8AVzr9VHueXqfzfkzUA0aXe/Q4XG3UTmhlP6Pt+HQc5bbAPIJFo7ZIMh9tvn+99QuiMcyDJdYumegGAczl0N+g==
-  /sodium-native/2.2.2:
+  /sodium-native/2.2.3:
     dependencies:
       ini: 1.3.5
       nan: 2.11.1
@@ -4504,7 +4469,7 @@ packages:
     optional: true
     requiresBuild: true
     resolution:
-      integrity: sha512-TdAa+PlmWki2Spx3TJyGFVkj6gLsxs5HV/i/j2COZ5INEaCmLz15NIHgUAT/GQ0KrG8Ddy6tkvuP7B5YJpmW6g==
+      integrity: sha512-0rQvKwlWW86YmmAhosnJ6/2PR3mdAtfuWW147L4x3/gwfL7XiJ7mf2BPvBwU16vsYQNY1yxOQg9YT/MN6qoZOA==
   /source-map-resolve/0.5.2:
     dependencies:
       atob: 2.1.2
@@ -4563,13 +4528,27 @@ packages:
     dev: true
     resolution:
       integrity: sha1-BOaSb2YolTVPPdAVIDYzuFcpfiw=
-  /ssb-about/0.1.2:
+  /ssb-about/2.0.0:
     dependencies:
       flumeview-reduce: 1.3.14
+      pull-defer: 0.2.3
+      pull-stream: 3.6.9
       ssb-ref: 2.13.6
     dev: false
     resolution:
-      integrity: sha512-/dvDJZdvukOHTjWDAUDdi5euG3fHIgW0z8xIWI+n+C3ugDCPad24josbRBMtgJ6e5piKOzstTlumIqfekvv8YQ==
+      integrity: sha512-H8iNK86AQBnIUyxBcx22M5p2Vq8zQgTzPCS2Pw/7W57uH0BgDUAQe1DiTW6T8kEsg5+2GMaCXLH+gEXufcIgnw==
+  /ssb-backlinks/0.7.3:
+    dependencies:
+      base64-url: 2.2.0
+      deep-equal: 1.0.1
+      flumeview-query: 6.3.0
+      pull-stream: 3.6.9
+      ssb-keys: 7.1.3
+      ssb-ref: 2.13.6
+      xtend: 4.0.1
+    dev: false
+    resolution:
+      integrity: sha512-84s5phSVyZsYV0FTmBJvICPgOMuu8ouzukG8Gz2XtuOui95GBP/G7UIBURgYVS82XA6g9xPA/jf38fsMxid38Q==
   /ssb-blobs/1.1.6:
     dependencies:
       cont: 1.0.3
@@ -4582,20 +4561,22 @@ packages:
     dev: false
     resolution:
       integrity: sha512-/dQIhg19Sk/cnRg25yUFFKhY67eB+Mlx00rK138dCVz3JhKLdmgDbK8kF5Ik/C/DdxDVya3xJZRW0fexwGOAkw==
-  /ssb-chat-core/1.0.48:
+  /ssb-chat-core/1.0.50:
     dependencies:
+      debug: 4.1.0
       immutable: 3.8.2
       nanobus: 4.3.5
       node-persist: 2.1.0
       pull-stream: 3.6.9
       scuttlebot: 12.2.3
-      ssb-about: 0.1.2
+      ssb-about: 2.0.0
+      ssb-backlinks: 0.7.3
       ssb-client: 4.6.0
       ssb-config: 2.3.7
       ssb-ebt: 5.2.7
       ssb-friends: 3.1.6
       ssb-keys: 7.1.3
-      ssb-names: 3.1.3
+      ssb-names: 3.1.4
       ssb-ooo: 1.1.0
       ssb-private: 0.2.3
       ssb-query: 2.3.0
@@ -4603,7 +4584,7 @@ packages:
       ssb-search: 1.1.2
     dev: false
     resolution:
-      integrity: sha512-J69CIiGqbwYKLN36k/BQkseTw+ew3u/Mw8p8ikN29rfeXpM6/2MOqGpMMZXPsxX47xb7wYPN0/nlc0rsPid/Lg==
+      integrity: sha512-u7n101OVaRMo4AX1XPZ9q7tM7gMf1TnAqMnYl4BorRVgKb6F/FlTCJot5KNMnwOaSinQwUPUmyAMnugBNP+UZA==
   /ssb-client/4.6.0:
     dependencies:
       explain-error: 1.0.4
@@ -4672,16 +4653,17 @@ packages:
     dev: false
     resolution:
       integrity: sha1-xoHaXNcMV0ySLcpPA8UhU4E1wkM=
-  /ssb-names/3.1.3:
+  /ssb-names/3.1.4:
     dependencies:
       flumeview-reduce: 1.3.14
       graphreduce: 3.0.4
+      hashlru: 2.2.1
       pull-stream: 3.6.9
       ssb-msgs: 5.2.0
       ssb-ref: 2.13.6
     dev: false
     resolution:
-      integrity: sha512-6VNuatPnWuZWvz2axty97e7EqqZQddFMbMd2E5FpFfVWZi8hzCtvxsDc5f/4kqgSWsr4bgbJ1Ffm2shSc0hkDA==
+      integrity: sha512-fAMJSl3aBUErruIfVcBFX5iTV4Vlq/TFuu4budxR45zNiM+0+ErP8itZEDgGKWFbEmTKwIVtW6Gf4QWSApeWeQ==
   /ssb-ooo/1.1.0:
     dependencies:
       flumecodec: 0.0.1
@@ -5372,6 +5354,6 @@ specifiers:
   date-fns: ^1.29.0
   diffy: ^2.0.0
   node-emoji: ^1.8.1
-  ssb-chat-core: ^1.0.43
+  ssb-chat-core: ^1.0.50
   standard: ^12.0.1
   update-notifier: ^2.5.0

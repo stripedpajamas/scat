@@ -1,3 +1,4 @@
+const core = require('ssb-chat-core')
 const Diffy = require('diffy')
 const trim = require('diffy/trim')
 const state = require('../state')
@@ -21,20 +22,31 @@ const prompter = () => (
 )
 
 module.exports = (opts) => {
-  diffy = Diffy({ fullscreen: !opts.debug })
+  if (!opts.quiet) {
+    diffy = Diffy({ fullscreen: !opts.debug })
 
-  // rerender while i type
-  input.on('update', () => {
-    diffy.render()
-    state.setInput(input.line())
-  })
+    // rerender while i type
+    input.on('update', () => {
+      diffy.render()
+      state.setInput(input.line())
+    })
 
-  // update state with dimensions on resize
-  diffy.on('resize', () => {
+    // update state with dimensions on resize
+    diffy.on('resize', () => {
+      state.setViewport(diffy.width, diffy.height)
+    })
+
     state.setViewport(diffy.width, diffy.height)
-  })
+    prompter()
 
-  state.setViewport(diffy.width, diffy.height)
-  prompter()
-  setInterval(() => diffy.render(), 100)
+    core.events.on('*', () => diffy.render())
+  } else {
+    // quiet mode is for testing
+    // it doesn't start Diffy but calls most of the same methods
+    core.events.on('*', () => {
+      header()
+      state.getViewableMessages()
+      state.getSystemMessage()
+    })
+  }
 }

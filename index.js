@@ -44,5 +44,5 @@ core.start({
     process.exit(1)
   }
 
-  ui({ debug: !!args.debug })
+  ui({ debug: !!args.debug, quiet: !!args.quiet })
 })
