@@ -30,11 +30,11 @@
   },
   "dependencies": {
     "clp": "^4.0.10",
+    "colorette": "^1.0.0",
     "date-fns": "^1.29.0",
     "diffy": "^2.0.0",
     "node-emoji": "^1.8.1",
-    "ssb-chat-core": "^1.0.50",
-    "colorette": "^1.0.0",
+    "ssb-chat-core": "^1.0.51",
     "update-notifier": "^2.5.0"
   }
 }
