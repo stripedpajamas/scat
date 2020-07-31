@@ -1,40 +1,8 @@
 {
-  "name": "ssb-chat",
-  "version": "1.7.4",
-  "description": "scuttlebutt chat",
-  "main": "index.js",
-  "bin": {
-    "scat": "index.js"
-  },
-  "scripts": {
-    "start": "node index.js",
-    "test": "standard"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/stripedpajamas/scat.git"
-  },
-  "keywords": [
-    "scuttlebutt",
-    "chat",
-    "ssb"
-  ],
-  "author": "Peter Squicciarini <stripedpajamas273@gmail.com>",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/stripedpajamas/scat/issues"
-  },
-  "homepage": "https://github.com/stripedpajamas/scat#readme",
-  "devDependencies": {
-    "standard": "^12.0.1"
-  },
-  "dependencies": {
-    "clp": "^4.0.10",
-    "colorette": "^1.0.0",
-    "date-fns": "^1.29.0",
-    "diffy": "^2.0.0",
-    "node-emoji": "^1.8.1",
-    "ssb-chat-core": "^1.0.51",
-    "update-notifier": "^2.5.0"
-  }
+	"dependencies": {
+		"colorette": "^1.2.1",
+		"diffy": "^2.1.0",
+		"pull-stream": "^3.6.14",
+		"ssb-client": "^4.9.0"
+	}
 }
