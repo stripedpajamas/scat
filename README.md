@@ -1,6 +1,8 @@
 # :mouse: scat :mouse:
 tiny chat-like cli built on scuttlebutt
 
+### UPDATE 8/2020: I wrote a much leaner/simplified scat here https://github.com/stripedpajamas/scatzero
+
 
 ![npm](https://img.shields.io/npm/v/ssb-chat.svg) ![NpmLicense](https://img.shields.io/npm/l/ssb-chat.svg) ![npm](https://img.shields.io/npm/dt/ssb-chat.svg)
 
